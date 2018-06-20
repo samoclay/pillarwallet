@@ -65,12 +65,12 @@ class Welcome extends React.Component<Props, State> {
     const { isFetched } = this.props;
     if (!isFetched) return null;
     return (
-      <Container center>
+      <Container center testID="Get Started Terms and Conditions" >
         <AnimatedBackground shouldAnimate={this.state.shouldAnimate} />
         <PillarLogo source={pillarLogoSource} />
         <Footer>
-          <Button block marginBottom="20px" onPress={this.loginAction} title="Get Started" />
-          <HyperLink url="https://pillarproject.io/en/terms-of-use/">Terms and Conditions</HyperLink>
+          <Button block marginBottom="20px" onPress={this.loginAction} title="Get Started" testID="Get Started" />
+          <HyperLink url="https://pillarproject.io/en/terms-of-use/" testID="Terms and Conditions">Terms and Conditions</HyperLink>
         </Footer>
       </Container>
     );

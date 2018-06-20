@@ -200,6 +200,7 @@ workflows:
           filters:
             branches:
               only:
+                  - experiment_with_detox
                   - develop
                   - master
       - deploy:
