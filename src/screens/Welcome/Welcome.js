@@ -69,8 +69,8 @@ class Welcome extends React.Component<Props, State> {
         <AnimatedBackground shouldAnimate={this.state.shouldAnimate} />
         <PillarLogo source={pillarLogoSource} />
         <Footer>
-          <Button block marginBottom="20px" onPress={this.loginAction} title="Get Started" testID="Get Started" />
-          <HyperLink url="https://pillarproject.io/en/terms-of-use/" testID="Terms and Conditions">Terms and Conditions</HyperLink>
+          <Button block marginBottom="20px" onPress={this.loginAction} title="Get Started" testID={"Get Started"} />
+          <HyperLink url="https://pillarproject.io/en/terms-of-use/" testID={"Terms and Conditions"}>Terms and Conditions</HyperLink>
         </Footer>
       </Container>
     );
