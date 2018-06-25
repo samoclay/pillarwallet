@@ -214,8 +214,8 @@
   "detox": {
     "configurations": {
       "ios.sim.debug": {
-        "binaryPath": "build/Build/Products/Release-iphonesimulator/pillar-wallet.app",
-        "build": "xcodebuild -workspace ios/pillar-wallet.xcworkspace -scheme pillar-wallet -arch i386  -sdk iphonesimulator11.4 -derivedDataPath build",
+        "build": "cd ios && fastlane build_ios_simulator",
+        "binaryPath": "/Users/issasalad/pillarwallet/Release-iphonesimulator/pillar-wallet.app",
         "type": "ios.simulator",
         "name": "iPhone 7"
       }
