@@ -12,6 +12,8 @@
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-plugin-styled-components": "^1.5.1",
     "babel-runtime": "^6.26.0",
+    "cucumber": "^4.2.1",
+    "detox": "^7.4.3",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^4.19.1",
@@ -55,6 +57,7 @@
     "flow": "flow",
     "flow-stop": "flow stop",
     "flow-typed": "flow-typed install",
+    "cucumber": "./node_modules/.bin/detox build --configuration ios.sim.debug && ./node_modules/.bin/cucumber-js ./features/splashScreen.feature",
     "validate": "run-s flow test lint",
     "jest": "jest --colors",
     "jest-watch": "jest --colors --watchAll",
@@ -207,5 +210,15 @@
     "timers": "timers-browserify",
     "tty": "tty-browserify",
     "tls": false
+  },
+  "detox": {
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "build/Build/Products/Release-iphonesimulator/pillar-wallet.app",
+        "build": "xcodebuild -workspace ios/pillar-wallet.xcworkspace -scheme pillar-wallet -arch i386  -sdk iphonesimulator11.4 -derivedDataPath build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    }
   }
 }
