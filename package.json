@@ -215,7 +215,7 @@
     "configurations": {
       "ios.sim.debug": {
         "build": "cd ios && fastlane build_ios_simulator",
-        "binaryPath": "/Users/issasalad/pillarwallet/Release-iphonesimulator/pillar-wallet.app",
+        "binaryPath": "/Users/issasalad/pillarwallet/Debug-iphonesimulator/pillar-wallet.app",
         "type": "ios.simulator",
         "name": "iPhone 7"
       }

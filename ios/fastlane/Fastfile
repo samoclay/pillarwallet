@@ -14,7 +14,7 @@ platform :ios do
         xcbuild(
               workspace: "pillar-wallet.xcworkspace",
               scheme: "pillar-wallet",
-              configuration: "Release",
+              configuration: "Debug",
               xcargs: "-sdk iphonesimulator SYMROOT='~/pillarwallet'"
           )
   # zip(path: "/Users/distiller/pillarwallet/Release-iphonesimulator/pillar-wallet.app",
