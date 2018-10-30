@@ -6,6 +6,39 @@ platform :ios do
     setup_circle_ci
   end
 
+  # desc "Setup Integration branch"
+  # lane :create_integration_development do
+  #   match(
+  #     git_url: "git@github.com:pillarwallet/fastlane_ios_certificates.git",
+  #     git_branch: "integration",
+  #     app_identifier: "com.pillarproject.wallet.integration",
+  #     type: "development"
+  #   )
+  # end
+
+  desc "Generate and Install Integration Provisioning Profile"
+  lane :create_intergration_provisioning_profile do
+    get_provisioning_profile(
+      force:false,
+      app_identifier: "com.pillarproject.wallet.integration",
+      username: "automation@pillarproject.io",
+      development: true,
+      provisioning_name: "com.pillarproject.wallet.integration Development"
+    )
+  end
+
+  desc "Update Integration Provisioning Profile with Push Notifications"
+  lane :create_integration_prov_profile_push_notifications do
+  get_push_certificate(
+    force: false,
+    development: true,
+    app_identifier: "com.pillarproject.wallet.integration",
+    username: "automation@pillarproject.io",
+    team_id: "J9DEY3FGPD"
+    )
+  end
+
+
   desc "Release to production TestFlight"
   lane :deploy_prod do |options|
     sh "/usr/libexec/PlistBuddy -c 'Set :CFBundleVersion $CIRCLE_BUILD_NUM' ~/pillarwallet/ios/pillarwallet/Info.plist"
