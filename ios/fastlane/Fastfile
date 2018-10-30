@@ -38,6 +38,19 @@ platform :ios do
     )
   end
 
+  desc "Build Integration Simulator"
+  lane :build_integration_simulator do
+    xcbuild(
+            workspace: "pillarwallet.xcworkspace",
+            scheme: "Integration",
+            configuration: "Integration.Debug",
+            xcargs: "-sdk iphonesimulator SYMROOT='~/pillarwallet'"
+          )
+    zip(path: "/Users/distiller/pillarwallet/Release-iphonesimulator/pillarwallet-integration.app",
+        output_path: "./build/pillarwallet-integration.app.zip"
+      )
+  end
+
 
   desc "Release to production TestFlight"
   lane :deploy_prod do |options|
