@@ -24,6 +24,20 @@ jobs:
           name: Run validation
           command: yarn validate
 
+  stage_ios_debug:
+    working_directory: ~/pillarwallet
+    macos:
+      xcode: "9.4.0"
+    environment:
+      FL_OUTPUT_DIR: output
+    shell: /bin/bash --login -o pipefail
+
+    steps:
+      - checkout
+      - run:
+          name: Testing Pipeline
+          command: echo "Testing the Pipeline 1...2...3"
+
   stage_ios:
     working_directory: ~/pillarwallet
     macos:
