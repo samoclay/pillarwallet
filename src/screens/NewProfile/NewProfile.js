@@ -17,6 +17,7 @@ import Title from 'components/Title';
 import ProfileImage from 'components/ProfileImage';
 import { validateUserDetailsAction, registerOnBackendAction } from 'actions/onboardingActions';
 import { USERNAME_EXISTS, USERNAME_OK, CHECKING_USERNAME } from 'constants/walletConstants';
+import { testHookHeader, testHookButton } from '../../testUtils/testHook';
 
 const { Form } = t.form;
 const maxUsernameLength = 20;
@@ -196,6 +197,7 @@ class NewProfile extends React.Component<Props, State> {
     return (
       <Wrapper>
         <Header
+          {...testHookHeader('ChooseUsername')}
           title="choose username"
           onBack={retry ? undefined : () => this.props.navigation.goBack(PIN_CODE_CONFIRMATION)}
         />
@@ -216,6 +218,7 @@ class NewProfile extends React.Component<Props, State> {
         </Wrapper>
         <Footer>
           <Button
+            {...testHookButton('Next')}
             small
             flexRight
             onPress={this.handleSubmit}

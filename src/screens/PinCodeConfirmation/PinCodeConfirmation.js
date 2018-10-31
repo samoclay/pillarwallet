@@ -9,6 +9,7 @@ import ErrorMessage from 'components/ErrorMessage';
 import { confirmPinForNewWalletAction } from 'actions/walletActions';
 import { validatePin } from 'utils/validators';
 import { PIN_CODE_CONFIRMATION } from 'constants/navigationConstants';
+import { testHookHeader } from '../../testUtils/testHook';
 
 type Props = {
   confirmPinForNewWallet: (pin: string) => Function,
@@ -55,7 +56,7 @@ class PinCodeConfirmation extends React.Component<Props, State> {
     return (
       <Container>
         {!!this.state.errorMessage && <ErrorMessage>{this.state.errorMessage}</ErrorMessage>}
-        <Header title="confirm pincode" onBack={() => this.props.navigation.goBack(null)} />
+        <Header {...testHookHeader('ConfirmPincode')} title="confirm pincode" onBack={() => this.props.navigation.goBack(null)} />
         <PinCode
           onPinEntered={this.handlePinSubmit}
           onPinChanged={this.handlePinChange}

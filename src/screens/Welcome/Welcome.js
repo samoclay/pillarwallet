@@ -9,6 +9,7 @@ import AnimatedBackground from 'components/AnimatedBackground';
 import IFrameModal from 'components/Modals/IFrameModal';
 import ButtonText from 'components/ButtonText';
 import { CachedImage } from 'react-native-cached-image';
+import { testHookImage, testHookButton } from '../../testUtils/testHook';
 
 type Props = {
   navigation: NavigationScreenProp<*>,
@@ -64,13 +65,13 @@ class Welcome extends React.Component<Props, State> {
     const { showTermsConditionsModal } = this.state;
     return (
       <Container>
-        <AnimatedBackground shouldAnimate={this.state.shouldAnimate} />
+        {/* <AnimatedBackground shouldAnimate={this.state.shouldAnimate && !__DEV__} /> */}
         <Wrapper fullScreen center>
-          <PillarLogo source={pillarLogoSource} />
+          <PillarLogo {...testHookImage('PillarLogo')} source={pillarLogoSource} />
         </Wrapper>
         <Footer>
-          <Button block marginBottom="20px" onPress={this.loginAction} title="Get Started" />
-          <ButtonText buttonText="Terms and Conditions" onPress={this.toggleTermsConditionsModal} />
+          <Button {...testHookButton('GetStarted')} block marginBottom="20px" onPress={this.loginAction} title="Get Started" />
+          <ButtonText {...testHookButton('TermsAndConditions')} buttonText="Terms and Conditions" onPress={this.toggleTermsConditionsModal} />
         </Footer>
         <IFrameModal
           isVisible={showTermsConditionsModal}

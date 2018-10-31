@@ -4,6 +4,7 @@ import styled from 'styled-components/native';
 import { transparentize } from 'polished';
 import { BaseText, BoldText } from 'components/Typography';
 import { baseColors, fontSizes } from 'utils/variables';
+import { testHook } from '../../testUtils/testHook';
 
 
 const MnemonicPhraseWrapper = styled.View`
@@ -54,6 +55,7 @@ const getIndex = (number: number) => {
 
 type Props = {
   phrase: string,
+  testHookId?: string,
 };
 
 const MnemonicPhrase = (props: Props) => {
@@ -64,12 +66,12 @@ const MnemonicPhrase = (props: Props) => {
 
   return (
     <MnemonicPhraseWrapper>
-      <Column>
+      <Column {...testHook('Column')}>
         {
           mnemonic1to6.map((word, index) => (
             <MnemonicPhraseItem key={`${word}+${index}`}>
               <MnemonicPhraseIndex>{getIndex(index + 1)}</MnemonicPhraseIndex>
-              <MnemonicPhraseWord>{word}</MnemonicPhraseWord>
+              <MnemonicPhraseWord {...testHook(props.testHookId)}>{word}</MnemonicPhraseWord>
             </MnemonicPhraseItem>
             ),
           )
@@ -80,7 +82,7 @@ const MnemonicPhrase = (props: Props) => {
           mnemonic7to12.map((word, index) => (
             <MnemonicPhraseItem key={`${word}+${index}`}>
               <MnemonicPhraseIndex>{getIndex(index + 7)}</MnemonicPhraseIndex>
-              <MnemonicPhraseWord>{word}</MnemonicPhraseWord>
+              <MnemonicPhraseWord {...testHook(props.testHookId)}>{word}</MnemonicPhraseWord>
             </MnemonicPhraseItem>
             ),
           )

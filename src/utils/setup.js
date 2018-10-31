@@ -9,5 +9,8 @@ YellowBox.ignoreWarnings([
   'Module Intercom',
   'Class EX'
 ]);
+if (__DEV__) {
+  console.disableYellowBox = true;
+}
 import 'utils/shim';
 import'crypto';

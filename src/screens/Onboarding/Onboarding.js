@@ -7,6 +7,7 @@ import { Container, Wrapper, Footer } from 'components/Layout';
 import Header from 'components/Header';
 import { Paragraph } from 'components/Typography';
 import Button from 'components/Button';
+import { testHookHeader, testHookButton, testHookParagraph } from '../../testUtils/testHook';
 
 type Props = {
   navigation: NavigationScreenProp<*>,
@@ -24,15 +25,15 @@ class Onboarding extends React.Component<Props> {
   render() {
     return (
       <Container>
-        <Header title="welcome" onBack={() => this.props.navigation.goBack(null)} />
+        <Header {...testHookHeader('Welcome')} title="welcome" onBack={() => this.props.navigation.goBack(null)} />
         <Wrapper regularPadding>
-          <Paragraph>Pillar is a next-generation digital wallet
+          <Paragraph {...testHookParagraph()}>Pillar is a next-generation digital wallet
             and application for personal data management.
           </Paragraph>
         </Wrapper>
         <Footer>
-          <Button block marginBottom="20px" marginTop="20px" onPress={this.createNewWallet} title="Setup New Wallet" />
-          <Button block onPress={this.importOldWallet} secondary title="Import Wallet" />
+          <Button {...testHookButton('SetupNewWallet')} block marginBottom="20px" marginTop="20px" onPress={this.createNewWallet} title="Setup New Wallet" />
+          <Button {...testHookButton('ImportWallet')} block onPress={this.importOldWallet} secondary title="Import Wallet" />
         </Footer>
       </Container>
     );

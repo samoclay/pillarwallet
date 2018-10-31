@@ -39,6 +39,7 @@ import { spacing, baseColors } from 'utils/variables';
 import { getBalance } from 'utils/assets';
 import { SDK_PROVIDER } from 'react-native-dotenv';
 import HideAssetButton from './HideAssetButton';
+import { testHookHeader } from '../../testUtils/testHook';
 
 type Props = {
   fetchInitialAssets: (walletAddress: string) => Function,
@@ -369,6 +370,7 @@ class AssetsScreen extends React.Component<Props, State> {
     return (
       <Container color={containerColor}>
         <Header
+          {...testHookHeader('Assets')}
           title="assets"
           onNextPress={this.goToAddTokenPage}
           nextIcon="more"

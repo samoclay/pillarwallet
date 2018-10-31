@@ -7,6 +7,7 @@ import { noop } from 'utils/common';
 import Title from 'components/Title';
 import styled from 'styled-components/native';
 import IconButton from 'components/IconButton';
+import { testHookHeaderInternal } from '../../testUtils/testHook';
 
 type Props = {
   onBack?: Function,
@@ -25,6 +26,7 @@ type Props = {
   headerRightFlex?: string,
   overlay?: boolean,
   backIcon?: string,
+  testHookId?: string,
 }
 
 const Wrapper = styled.View`
@@ -118,8 +120,15 @@ const Header = (props: Props) => {
   };
 
   return (
-    <Wrapper overlay={overlay} noMargin={noMargin} flexStart={flexStart} style={style} noPadding={noPadding}>
-      <HeaderLeft showTitleLeft={showTitleLeft}>
+    <Wrapper
+      {...testHookHeaderInternal(props.testHookId)}
+      overlay={overlay}
+      noMargin={noMargin}
+      flexStart={flexStart}
+      style={style}
+      noPadding={noPadding}
+    >
+      <HeaderLeft {...testHookHeaderInternal(props.testHookId, 'Left')} showTitleLeft={showTitleLeft}>
         {onBack &&
           <BackIcon
             icon={backIcon || 'back'}
@@ -133,12 +142,12 @@ const Header = (props: Props) => {
         }
       </HeaderLeft>
       {showTitleCenter &&
-        <HeaderBody onCloseText={onCloseText}>
+        <HeaderBody {...testHookHeaderInternal(props.testHookId, 'Body')} onCloseText={onCloseText}>
           <Title align="center" noMargin title={title} />
         </HeaderBody >
       }
       {showRight &&
-        <HeaderRight flex={getHeaderRightFlex} onClose={onClose || noop}>
+        <HeaderRight {...testHookHeaderInternal(props.testHookId, 'Right')} flex={getHeaderRightFlex} onClose={onClose || noop}>
           {nextText &&
             <TextLink onPress={onNextPress}>{nextText}</TextLink>
           }

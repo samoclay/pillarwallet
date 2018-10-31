@@ -8,6 +8,7 @@ import ErrorMessage from 'components/ErrorMessage';
 import Header from 'components/Header';
 import { setPinForNewWalletAction } from 'actions/walletActions';
 import { validatePin } from 'utils/validators';
+import { testHookHeader } from '../../testUtils/testHook';
 
 type Props = {
   setPinForNewWallet: (pin: string) => Function,
@@ -47,7 +48,7 @@ class SetWalletPinCode extends React.Component<Props, State> {
     return (
       <Container>
         {!!error && <ErrorMessage>{error}</ErrorMessage>}
-        <Header title="create pincode" onBack={() => this.props.navigation.goBack(null)} />
+        <Header {...testHookHeader('CreatePincode')} title="create pincode" onBack={() => this.props.navigation.goBack(null)} />
         <PinCode
           onPinEntered={this.handlePinSubmit}
           onPinChanged={this.handlePinChange}

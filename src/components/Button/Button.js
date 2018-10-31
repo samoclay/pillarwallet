@@ -27,6 +27,7 @@ type Props = {
   flexRight?: boolean,
   small?: boolean,
   icon?: string,
+  testHookId?: string,
 };
 
 const themes = {

@@ -7,6 +7,7 @@ import { BaseText } from 'components/Typography';
 import { Wrapper } from 'components/Layout';
 import { KEYPAD_BUTTON_FORGOT } from 'constants/keyPadButtonsConstants';
 import keyPadTypes from './keyPadTypes';
+import { testHookButton } from '../../testUtils/testHook';
 
 const KeyPadWrapper = styled(Wrapper)`
   margin-top: auto;
@@ -130,7 +131,7 @@ export default class KeyPad extends React.Component<Props> {
       if (Platform.OS === 'ios') {
         return (
           <KeyInput key={value}>
-            <PinButton onPress={this.handleKeyPress(value)}>
+            <PinButton {...testHookButton(value)} onPress={this.handleKeyPress(value)}>
               {this.renderButton(btn)}
             </PinButton>
           </KeyInput>
@@ -139,6 +140,7 @@ export default class KeyPad extends React.Component<Props> {
       return (
         <KeyInput key={value}>
           <TouchableNativeFeedback
+            {...testHookButton(value)}
             onPress={this.handleKeyPress(value)}
             background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
           >

@@ -11,6 +11,7 @@ import Button from 'components/Button';
 import Header from 'components/Header';
 import IconButton from 'components/IconButton';
 import { SET_WALLET_PIN_CODE } from 'constants/navigationConstants';
+import { testHookHeader, testHookParagraph, testHook, testHookWordInputPrefix, testHookButton } from '../../testUtils/testHook';
 
 type State = {
   enteredWords: string[],
@@ -150,7 +151,7 @@ class BackupPhraseValidate extends React.Component<Props, State> {
       .map((el, i) => {
         return (
           <WordInputWrapper key={mnemonicList[i]}>
-            <WordInputPrefix><WordInputNumber>{wordsToValidate[i]}</WordInputNumber></WordInputPrefix>
+            <WordInputPrefix {...testHookWordInputPrefix()}><WordInputNumber>{wordsToValidate[i]}</WordInputNumber></WordInputPrefix>
             <WordInput filled={!!enteredWords[i]}>
               <WordInputText>{enteredWords[i] || ''}</WordInputText>
             </WordInput>
@@ -176,6 +177,7 @@ class BackupPhraseValidate extends React.Component<Props, State> {
       const isEntered = enteredWords.indexOf(word) > -1;
       return (
         <MnemonicPhraseWord
+          {...testHook('', 'Mnemonic')}
           key={`${word}${index}`}
           onPress={() => this.handleWordSetting(word)}
           entered={isEntered}
@@ -193,9 +195,9 @@ class BackupPhraseValidate extends React.Component<Props, State> {
 
     return (
       <Container>
-        <Header title="verify backup phrase" onBack={() => this.props.navigation.goBack(null)} />
+        <Header {...testHookHeader('BackupPhraseValidate')} title="verify backup phrase" onBack={() => this.props.navigation.goBack(null)} />
         <Wrapper regularPadding>
-          <Paragraph>
+          <Paragraph {...testHookParagraph('First')}>
             Please select the correct words.
           </Paragraph>
           <WordInputFields>
@@ -215,6 +217,7 @@ class BackupPhraseValidate extends React.Component<Props, State> {
             )}
           </ShuffledWordWrapper>
           <Button
+            {...testHookButton('Next')}
             small
             flexRight
             onPress={() => this.props.navigation.navigate(SET_WALLET_PIN_CODE)}

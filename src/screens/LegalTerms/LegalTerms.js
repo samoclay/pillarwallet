@@ -12,6 +12,7 @@ import { registerWalletAction } from 'actions/onboardingActions';
 import IFrameModal from 'components/Modals/IFrameModal';
 import { View } from 'react-native';
 import { fontSizes } from 'utils/variables';
+import { testHookCheckbox, testHookHeader, testHookButton } from '../../testUtils/testHook';
 
 
 type Props = {
@@ -82,15 +83,17 @@ class LegalTerms extends React.Component<Props, State> {
 
     return (
       <Container>
-        <Header title="review" onBack={() => this.props.navigation.goBack(null)} />
+        <Header {...testHookHeader('LegalTerms')} title="review" onBack={() => this.props.navigation.goBack(null)} />
         <Wrapper regularPadding>
           <Paragraph style={{ marginBottom: 20 }}>By using the Pillar Wallet I understand that:</Paragraph>
           <Checkbox
+            {...testHookCheckbox('Confirm1')}
             text="Pillar does not have access to my private keys."
             onPress={() => this.toggleCheckbox('userCheck1')}
           />
 
           <Checkbox
+            {...testHookCheckbox('Confirm2')}
             text="The only way to recover my assets is to use the 12-word backup phrase."
             onPress={() => this.toggleCheckbox('userCheck2')}
           />
@@ -99,6 +102,7 @@ class LegalTerms extends React.Component<Props, State> {
         <Footer>
 
           <Checkbox
+            {...testHookCheckbox('Confirm3')}
             text="I have read, understand, and agree to the Terms of Use."
             onPress={() => this.toggleCheckbox('userCheck3')}
             disabled={userCanAcceptCheck3}
@@ -106,6 +110,7 @@ class LegalTerms extends React.Component<Props, State> {
 
           <MultiButtonWrapper>
             <Button
+              {...testHookButton('ConfirmAndFinish')}
               block
               title="Confirm and Finish"
               onPress={this.handleConfirm}
