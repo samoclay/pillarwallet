@@ -9,6 +9,7 @@ import MnemonicPhrase from 'components/MnemonicPhrase';
 import Button from 'components/Button';
 import { generateWalletMnemonicAction } from 'actions/walletActions';
 import { BACKUP_PHRASE_VALIDATE } from 'constants/navigationConstants';
+import { testHookHeader, testHookParagraph, testHookButton, testHookMnemonicPhrase } from '../../testUtils/testHook';
 
 type Props = {
   wallet: Object,
@@ -40,13 +41,13 @@ class BackupPhrase extends React.Component<Props, {}> {
 
     return (
       <Container>
-        <Header title="backup phrase" onBack={() => this.props.navigation.goBack(null)} />
+        <Header {...testHookHeader('BackupPhrase')} title="backup phrase" onBack={() => this.props.navigation.goBack(null)} />
         <Wrapper regularPadding>
-          <Paragraph>Write down your 12 word backup phrase in the correct order.</Paragraph>
-          <MnemonicPhrase phrase={wallet.mnemonic.original} />
+          <Paragraph {...testHookParagraph('First')}>Write down your 12 word backup phrase in the correct order.</Paragraph>
+          <MnemonicPhrase {...testHookMnemonicPhrase()} phrase={wallet.mnemonic.original} />
         </Wrapper>
         <Footer>
-          <Button small flexRight onPress={() => this.props.navigation.navigate(BACKUP_PHRASE_VALIDATE)} title="Next" />
+          <Button {...testHookButton('Next')} small flexRight onPress={() => this.props.navigation.navigate(BACKUP_PHRASE_VALIDATE)} title="Next" />
         </Footer>
       </Container>
     );

@@ -4,6 +4,7 @@ import { Animated, TouchableHighlight } from 'react-native';
 import { BaseText } from 'components/Typography';
 import styled from 'styled-components/native';
 import { UIColors, baseColors, fontSizes } from 'utils/variables';
+import { testHook } from '../../testUtils/testHook';
 
 const CheckboxBox = styled.View`
   width: 40;
@@ -35,6 +36,7 @@ type Props = {
   onPress: Function,
   disabled?: boolean,
   checked?: boolean,
+  testHookId?: string,
 };
 
 type State = {
@@ -91,6 +93,7 @@ export default class Checkbox extends React.Component<Props, State> {
     const { disabled, text } = this.props;
     return (
       <TouchableHighlight
+        {...testHook(this.props.testHookId)}
         onPress={() => this.toggleCheckBox()}
         underlayColor="transparent"
       >

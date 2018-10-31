@@ -4,11 +4,13 @@ import { Platform, TouchableOpacity, TouchableNativeFeedback, View } from 'react
 import styled from 'styled-components/native';
 import { BaseText } from 'components/Typography';
 import { fontSizes } from 'utils/variables';
+import { testHook } from '../../testUtils/testHook';
 
 type Props = {
   buttonText: string,
   onPress: Function,
   fontSize?: number,
+  testHookId?: string,
 }
 
 const ButtonLabel = styled(BaseText)`
@@ -20,13 +22,14 @@ const ButtonText = (props: Props) => {
   const { buttonText, onPress } = props;
   if (Platform.OS === 'ios') {
     return (
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity {...testHook(props.testHookId)} onPress={onPress}>
         <ButtonLabel>{buttonText}</ButtonLabel>
       </TouchableOpacity>
     );
   }
   return (
     <TouchableNativeFeedback
+      {...testHook(props.testHookId)}
       onPress={onPress}
       background={TouchableNativeFeedback.SelectableBackgroundBorderless()}
     >
@@ -35,7 +38,7 @@ const ButtonText = (props: Props) => {
         margin: 0,
       }}
       >
-        <ButtonLabel>{buttonText}</ButtonLabel>
+        <ButtonLabel {...testHook('ButtonLabel')}>{buttonText}</ButtonLabel>
       </View>
     </TouchableNativeFeedback>
   );

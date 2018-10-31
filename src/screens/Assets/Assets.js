@@ -51,6 +51,7 @@ import assetsConfig from 'configs/assetsConfig';
 import { formatMoney } from 'utils/common';
 import { spacing } from 'utils/variables';
 import { getBalance, getRate } from 'utils/assets';
+import { testHookHeader } from '../../testUtils/testHook';
 
 type Props = {
   fetchInitialAssets: (walletAddress: string) => Function,
@@ -380,6 +381,7 @@ class AssetsScreen extends React.Component<Props, State> {
     return (
       <Container>
         <Header
+          {...testHookHeader('Assets')}
           title="assets"
           onNextPress={this.goToAddTokenPage}
           nextIcon="more"
