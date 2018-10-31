@@ -2042,6 +2042,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/pillarwallet\"",
+					"${PODS_CONFIGURATION_BUILD_DIR}/**",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
