@@ -485,16 +485,16 @@ jobs:
 
 workflows:
   version: 2
-  # build_and_deploy_staging_debug:
-  #   jobs:
-  #     - build
-  #     - stage_ios_debug:
-  #         requires:
-  #           - build
-  #         filters:
-  #           branches:
-  #             only:
-  #               - feature/ios_staging_debug_test
+  build_and_deploy_staging_debug:
+    jobs:
+      - build
+      - stage_ios_debug:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - feature/appium-test-automation-poc
   build_and_deploy:
     jobs:
       - build
