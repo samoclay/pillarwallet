@@ -147,7 +147,11 @@ const Header = (props: Props) => {
         </HeaderBody >
       }
       {showRight &&
-        <HeaderRight {...testHookHeaderInternal(props.testHookId, 'Right')} flex={getHeaderRightFlex} onClose={onClose || noop}>
+        <HeaderRight
+          {...testHookHeaderInternal(props.testHookId, 'Right')}
+          flex={getHeaderRightFlex}
+          onClose={onClose || noop}
+        >
           {nextText &&
             <TextLink onPress={onNextPress}>{nextText}</TextLink>
           }

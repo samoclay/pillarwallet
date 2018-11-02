@@ -56,7 +56,11 @@ class PinCodeConfirmation extends React.Component<Props, State> {
     return (
       <Container>
         {!!this.state.errorMessage && <ErrorMessage>{this.state.errorMessage}</ErrorMessage>}
-        <Header {...testHookHeader('ConfirmPincode')} title="confirm pincode" onBack={() => this.props.navigation.goBack(null)} />
+        <Header
+          {...testHookHeader('ConfirmPincode')}
+          title="confirm pincode"
+          onBack={() => this.props.navigation.goBack(null)}
+        />
         <PinCode
           onPinEntered={this.handlePinSubmit}
           onPinChanged={this.handlePinChange}
