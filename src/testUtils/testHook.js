@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 const prefix: string = 'Hook';
 
-export function testHook(id: string, suffix: string = '') {
+export function testHook(id: string = '', suffix: string = '') {
   return __DEV__ ? { // do nothing if production release build
     testID: Platform.select({ ios: `${prefix}${id || ''}${suffix}`, android: undefined }),
     accessibilityLabel: Platform.select({ ios: undefined, android: `${prefix}${id || ''}${suffix}` }),
@@ -12,23 +12,23 @@ export function testHook(id: string, suffix: string = '') {
   } : undefined;
 }
 
-export function testHookButton(id: string) {
+export function testHookButton(id: string = '') {
   return testHook(id, 'Button');
 }
 
-export function testHookCheckbox(id: string) {
+export function testHookCheckbox(id: string = '') {
   return testHook(id, 'Checkbox');
 }
 
-export function testHookHeader(id: string) {
+export function testHookHeader(id: string = '') {
   return testHook(id, 'Header');
 }
 
-export function testHookHeaderInternal(id: string, suffix: string) {
+export function testHookHeaderInternal(id: string = '', suffix: string = '') {
   return testHook(id || 'Header', suffix);
 }
 
-export function testHookImage(id: string) {
+export function testHookImage(id: string = '') {
   return testHook(id, 'Image');
 }
 
@@ -36,10 +36,10 @@ export function testHookMnemonicPhrase() {
   return testHook('Mnemonic');
 }
 
-export function testHookParagraph(id: string) {
+export function testHookParagraph(id: string = '') {
   return testHook(id, 'Paragraph');
 }
 
-export function testHookWordInputPrefix(id: string) {
+export function testHookWordInputPrefix(id: string = '') {
   return testHook(id, 'WordInputPrefix');
 }
