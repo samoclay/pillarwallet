@@ -98,20 +98,20 @@ jobs:
           name: Create integration ios simulator
           command: |
             export buildNumber=$(cat ~/pillarwallet/buildNumber.txt)
-            cd ios && bundle exec fastlane build_integration_simulator build_number:$buildNumber
+            cd ios && bundle exec fastlane build_integration_device build_number:$buildNumber
       # - run:
       #      name: Announce Deployment
       #      command: |
       #        chmod +x .circleci/announceDeployment.sh
       #        .circleci/announceDeployment.sh "Pillar Wallet" "Staging TestFlight"
-      - run:
-          name: prepare to archive .app file
-          command: |
-            mkdir -p ./toArchive
-            cp ./ios/build/pillarwallet-integration.app.zip ./toArchive
-      - store_artifacts:
-          path: ./toArchive
-          destination: app_simulator_build
+      # - run:
+      #     name: prepare to archive .app file
+      #     command: |
+      #       mkdir -p ./toArchive
+      #       cp ./ios/build/pillarwallet-integration.app.zip ./toArchive
+      # - store_artifacts:
+      #     path: ./toArchive
+      #     destination: app_simulator_build
 
   stage_ios:
     working_directory: ~/pillarwallet
@@ -485,16 +485,16 @@ jobs:
 
 workflows:
   version: 2
-  build_and_deploy_staging_debug:
-    jobs:
-      - build
-      - stage_ios_debug:
-          requires:
-            - build
-          filters:
-            branches:
-              only:
-                - feature/ios_staging_debug_test
+  # build_and_deploy_staging_debug:
+  #   jobs:
+  #     - build
+  #     - stage_ios_debug:
+  #         requires:
+  #           - build
+  #         filters:
+  #           branches:
+  #             only:
+  #               - feature/ios_staging_debug_test
   build_and_deploy:
     jobs:
       - build

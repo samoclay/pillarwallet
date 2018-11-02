@@ -6,16 +6,6 @@ platform :ios do
     setup_circle_ci
   end
 
-  # desc "Setup Integration branch"
-  # lane :create_integration_development do
-  #   match(
-  #     git_url: "git@github.com:pillarwallet/fastlane_ios_certificates.git",
-  #     git_branch: "integration",
-  #     app_identifier: "com.pillarproject.wallet.integration",
-  #     type: "development"
-  #   )
-  # end
-
   desc "Generate and Install Integration Provisioning Profile"
   lane :create_intergration_provisioning_profile do
     get_provisioning_profile(
@@ -38,19 +28,11 @@ platform :ios do
     )
   end
 
-  desc "Build Integration Simulator"
-  lane :build_integration_simulator do
-    xcbuild(
-            workspace: "pillarwallet.xcworkspace",
-            scheme: "Integration",
-            configuration: "Integration.Debug",
-            xcargs: "-sdk iphonesimulator SYMROOT='~/pillarwallet'"
-          )
-    zip(path: "/Users/distiller/pillarwallet/Release-iphonesimulator/pillarwallet-integration.app",
-        output_path: "./build/pillarwallet-integration.app.zip"
-      )
+  desc "Build Integration for Device"
+  lane :build_integration_device do
+    sh "xcodebuild -workspace ../pillarwallet.xcworkspace -configuration Integration.Release -scheme Integration -derivedDataPath ../build"
+    sh "mkdir -p ../build/pillarwallet/Payload && cp -R ../build/Build/Products/Release-iphoneos/pillarwallet-integration.app ../build/pillarwallet/Payload && cp -R ../pillarwallet/SwiftSupport ../build/pillarwallet && rm -rf ../build/pillarwallet/Payload/pillarwallet.app/libswiftRemoteMirror.dylib && cd ../build/pillarwallet && /usr/bin/zip -r -X ../../pillarwallet-integration.ipa *"
   end
-
 
   desc "Release to production TestFlight"
   lane :deploy_prod do |options|
