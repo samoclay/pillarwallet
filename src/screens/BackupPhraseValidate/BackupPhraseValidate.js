@@ -11,7 +11,13 @@ import Button from 'components/Button';
 import Header from 'components/Header';
 import IconButton from 'components/IconButton';
 import { SET_WALLET_PIN_CODE } from 'constants/navigationConstants';
-import { testHookHeader, testHookParagraph, testHook, testHookWordInputPrefix, testHookButton } from '../../testUtils/testHook';
+import {
+  testHookHeader,
+  testHookParagraph,
+  testHook,
+  testHookWordInputPrefix,
+  testHookButton,
+} from '../../testUtils/testHook';
 
 type State = {
   enteredWords: string[],
@@ -151,7 +157,10 @@ class BackupPhraseValidate extends React.Component<Props, State> {
       .map((el, i) => {
         return (
           <WordInputWrapper key={mnemonicList[i]}>
-            <WordInputPrefix {...testHookWordInputPrefix()}><WordInputNumber>{wordsToValidate[i]}</WordInputNumber></WordInputPrefix>
+            <WordInputPrefix
+              {...testHookWordInputPrefix()}
+            ><WordInputNumber>{wordsToValidate[i]}</WordInputNumber>
+            </WordInputPrefix>
             <WordInput filled={!!enteredWords[i]}>
               <WordInputText>{enteredWords[i] || ''}</WordInputText>
             </WordInput>
@@ -195,7 +204,11 @@ class BackupPhraseValidate extends React.Component<Props, State> {
 
     return (
       <Container>
-        <Header {...testHookHeader('BackupPhraseValidate')} title="verify backup phrase" onBack={() => this.props.navigation.goBack(null)} />
+        <Header
+          {...testHookHeader('BackupPhraseValidate')}
+          title="verify backup phrase"
+          onBack={() => this.props.navigation.goBack(null)}
+        />
         <Wrapper regularPadding>
           <Paragraph {...testHookParagraph('First')}>
             Please select the correct words.

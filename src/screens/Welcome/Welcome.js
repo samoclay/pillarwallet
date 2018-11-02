@@ -36,7 +36,7 @@ class Welcome extends React.Component<Props, State> {
   }
 
   state = {
-    shouldAnimate: true,
+    shouldAnimate: false, // MPL TEMP DISABLE
     showTermsConditionsModal: false,
   };
 
@@ -50,7 +50,7 @@ class Welcome extends React.Component<Props, State> {
 
   componentDidMount() {
     this.listeners = [
-      this.props.navigation.addListener('willFocus', () => this.setState({ shouldAnimate: true })),
+      this.props.navigation.addListener('willFocus', () => this.setState({ shouldAnimate: false })), // MPL TEMP DISABLE
       this.props.navigation.addListener('willBlur', () => this.setState({ shouldAnimate: false })),
     ];
   }
@@ -65,13 +65,23 @@ class Welcome extends React.Component<Props, State> {
     const { showTermsConditionsModal } = this.state;
     return (
       <Container>
-        {/* <AnimatedBackground shouldAnimate={this.state.shouldAnimate && !__DEV__} /> */}
+        <AnimatedBackground shouldAnimate={this.state.shouldAnimate} />
         <Wrapper fullScreen center>
           <PillarLogo {...testHookImage('PillarLogo')} source={pillarLogoSource} />
         </Wrapper>
         <Footer>
-          <Button {...testHookButton('GetStarted')} block marginBottom="20px" onPress={this.loginAction} title="Get Started" />
-          <ButtonText {...testHookButton('TermsAndConditions')} buttonText="Terms and Conditions" onPress={this.toggleTermsConditionsModal} />
+          <Button
+            {...testHookButton('GetStarted')}
+            block
+            marginBottom="20px"
+            onPress={this.loginAction}
+            title="Get Started"
+          />
+          <ButtonText
+            {...testHookButton('TermsAndConditions')}
+            buttonText="Terms and Conditions"
+            onPress={this.toggleTermsConditionsModal}
+          />
         </Footer>
         <IFrameModal
           isVisible={showTermsConditionsModal}
