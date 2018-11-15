@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  </head>
+  <body>
+
+    <!-- Insert a tokens table here to filter the ETH tokens -->
+    <!-- Source: https://coinmarketcap.com/tokens/views/all/ -->
+
+    <textarea id="ethTokens" name="name" rows="8" cols="80"></textarea>
+
+    <script type="text/javascript">
+      $('#assets-all').hide();
+
+      const ethTrList = $('#assets-all tr[data-platformsymbol=ETH]').toArray();
+      const ethTokens = [];
+
+      ethTrList.forEach(item => {
+        ethTokens.push({
+          name: $(item).find('a.currency-name-container').text(),
+          symbol: $(item).find('span.currency-symbol a.link-secondary').text(),
+          url:  'https://coinmarketcap.com' + $(item).find('a.currency-name-container').attr('href'),
+        });
+      });
+
+      $('#ethTokens').val(JSON.stringify(ethTokens));
+      console.log(ethTokens.length);
+    </script>
+
+
+  </body>
+</html>
