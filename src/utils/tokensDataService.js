@@ -148,10 +148,22 @@ export const getDataFromEtherscan = async (url: string) => {
     description = descriptionTr.slice(21, -11);
   }
 
+  // Get Total Supply
+  let totalSupply = '0';
+  const totalSupplyMatch = /[0-9]+,[0-9,]{3,}(<b>.<\/b>[.0-9]+)? /gm.exec(html);
+  if (totalSupplyMatch) {
+    const totalSupplyStr = totalSupplyMatch[0];
+    totalSupply = totalSupplyStr
+      .replace(' ', '')
+      .replace('<b>', '')
+      .replace('</b>', '');
+  }
+
   return {
     address,
     decimals,
     description,
+    totalSupply,
   };
 };
 

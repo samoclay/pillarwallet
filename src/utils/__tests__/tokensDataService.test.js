@@ -20,7 +20,7 @@ it.skip('should downloadLinksToEtherscan() and write to file', async () => {
 it.skip('should downloadDataFromEtherscan() and write to file', async () => {
   jest.setTimeout(3000000);
 
-  const tokens = coinMarketCapEthTokensWithLinks.slice(0, coinMarketCapEthTokensWithLinks.length);
+  const tokens = coinMarketCapEthTokensWithLinks;
   await downloadDataFromEtherscan(tokens);
 });
 
@@ -44,6 +44,7 @@ it.skip('should write assets.json', () => {
       wallpaperUrl: null,
       website: metadata.urls.website[0] || null,
       whitepaper: null,
+      totalSupply: token.totalSupply,
     };
   });
 
