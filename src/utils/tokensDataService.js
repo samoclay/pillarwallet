@@ -124,7 +124,7 @@ export const getLinkToEtherscan = async (url: string) => {
 
 /**
  * @param url
- * @returns {Promise<{address: (*|string), decimal: string}>}
+ * @returns {Promise<{address: (*|string), decimals: string}>}
  */
 export const getDataFromEtherscan = async (url: string) => {
   const res = await axios.get(url);
@@ -133,16 +133,25 @@ export const getDataFromEtherscan = async (url: string) => {
     .replace(/\s\s+/g, ' ');
 
   // Get Decimal
-  const decimalTr = /<tr id="ContentPlaceHolder1_trDecimals".*<tr id="ContentPlaceHolder1_tr_officialsite_2"/gm.exec(html)[0]; // eslint-disable-line max-len
-  const decimal = (/[0-9]+</gm.exec(decimalTr)[0]).slice(0, -1);
+  const decimalsTr = /<tr id="ContentPlaceHolder1_trDecimals".*<tr id="ContentPlaceHolder1_tr_officialsite_2"/gm.exec(html)[0]; // eslint-disable-line max-len
+  const decimals = (/[0-9]+</gm.exec(decimalsTr)[0]).slice(0, -1);
 
   // Get Address
   const addressTr = /('|")\/address\/0x[A-Za-z0-9]{40}('|")/gm.exec(html)[0];
   const address = /0x[A-Za-z0-9]{40}/gm.exec(addressTr)[0];
 
+  // Get Description
+  let description = '';
+  const descriptionMatch = /OVERVIEW<\/strong><\/p>.+<br><br><p>/gm.exec(html);
+  if (descriptionMatch) {
+    const descriptionTr = descriptionMatch[0];
+    description = descriptionTr.slice(21, -11);
+  }
+
   return {
     address,
-    decimal,
+    decimals,
+    description,
   };
 };
 
@@ -191,6 +200,7 @@ export const downloadDataFromEtherscan = async (tokens: Object[]) => {
       counter++;
     } catch (e) {
       console.log('!!! PAUSE !!!');
+      console.log(e);
       sleep(4000);
     }
   }

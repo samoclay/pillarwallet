@@ -10,17 +10,17 @@ import dataFromEtherscan from 'utils/__tests__/dataFromEtherscan';
 
 const fs = require('fs');
 
-it.skip('should getLinkToEtherscan() and write to file', async () => {
+it.skip('should downloadLinksToEtherscan() and write to file', async () => {
   jest.setTimeout(3000000);
 
   const tokens = coinMarketCapEthTokens.slice(0, 10);
   await downloadLinksToEtherscan(tokens);
 });
 
-it.skip('should getDataFromEtherscan() and write to file', async () => {
+it.skip('should downloadDataFromEtherscan() and write to file', async () => {
   jest.setTimeout(3000000);
 
-  const tokens = coinMarketCapEthTokensWithLinks.slice(0, 10);
+  const tokens = coinMarketCapEthTokensWithLinks.slice(0, coinMarketCapEthTokensWithLinks.length);
   await downloadDataFromEtherscan(tokens);
 });
 
@@ -30,8 +30,8 @@ it.skip('should write assets.json', () => {
     const metadata = tokensMetadata[token.symbol];
     return {
       address: token.address,
-      decimals: parseInt(token.decimal, 10),
-      description: null,
+      decimals: parseInt(token.decimals, 10),
+      description: token.description,
       email: null,
       iconMonoUrl: null,
       iconUrl: null,
