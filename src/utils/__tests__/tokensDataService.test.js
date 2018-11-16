@@ -35,7 +35,7 @@ it.skip('should write assets.json', () => {
     return {
       address: token.address,
       decimals: parseInt(token.decimals, 10),
-      description: token.description,
+      description: token.description || null,
       email: null,
       iconMonoUrl: null,
       iconUrl: null,
