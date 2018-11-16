@@ -112,14 +112,21 @@ export const toTokensInfoMapWithSymbolKey = (tokensMap: Object) => {
 };
 
 /**
- * @param url
- * @returns {Promise<*>}
+ * @param html
+ * @returns {*}
  */
-export const getLinkToEtherscan = async (url: string) => {
-  const res = await axios.get(url);
+export const getLinkToEtherscan = (html: string) => {
   const regexp = /https?:\/\/etherscan.io\/token\/[A-Za-z0-9]+/gm;
-  const result = regexp.exec(res.data);
+  const result = regexp.exec(html);
   return result ? result[0] : null;
+};
+
+export const getLinkToWhitePaper = (html: string) => {
+  const match = /<a .+Technical Documentation<\/a>/gm.exec(html);
+  if (!match) return '';
+
+  const matchWhitepaper = /https?:\/\/((?!").)+/gm.exec(match[0]);
+  return matchWhitepaper ? matchWhitepaper[0] : '';
 };
 
 /**
@@ -167,7 +174,15 @@ export const getDataFromEtherscan = async (url: string) => {
   };
 };
 
-export const downloadLinksToEtherscan = async (tokens: Object[]) => {
+/**
+ * @param tokens
+ * @returns {Promise<void>}
+ *
+ * - parse a link to Etherscan
+ * - parse a link to white paper
+ * - save to file
+ */
+export const downloadLinksFromCoinmarketcap = async (tokens: Object[]) => {
   const reachedTokens = [];
 
   for (let counter = 0; counter < tokens.length;) {
@@ -175,11 +190,15 @@ export const downloadLinksToEtherscan = async (tokens: Object[]) => {
     console.log('token: ', counter, token.name);
 
     try {
-      const linkToEtherscan = await getLinkToEtherscan(token.url); // eslint-disable-line no-await-in-loop
+      const res = await axios.get(token.url); // eslint-disable-line no-await-in-loop
+      const html = res.data;
+      const linkToEtherscan = getLinkToEtherscan(html);
+
       if (linkToEtherscan) {
         const reachedToken = {
           ...token,
           linkToEtherscan,
+          whitepaper: getLinkToWhitePaper(html),
         };
         reachedTokens.push(reachedToken);
       }
@@ -187,7 +206,7 @@ export const downloadLinksToEtherscan = async (tokens: Object[]) => {
       sleep(1000);
     } catch (e) {
       console.log('!!! PAUSE !!!');
-      sleep(10000);
+      sleep(30000);
     }
   }
 
