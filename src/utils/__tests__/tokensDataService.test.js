@@ -7,6 +7,7 @@ import coinMarketCapEthTokens from 'utils/__tests__/coinMarketCapEthTokens';
 import coinMarketCapEthTokensWithLinks from 'utils/__tests__/coinMarketCapEthTokensWithLinks';
 import coinMarkerCapTokensInfoMapBySymbol from 'utils/__tests__/coinMarkerCapTokensInfoMapBySymbol';
 import dataFromEtherscan from 'utils/__tests__/dataFromEtherscan';
+import iconsList from 'utils/__tests__/iconsList';
 
 const fs = require('fs');
 
@@ -28,17 +29,27 @@ it.skip('should write assets.json', () => {
   const tokensMetadata = coinMarkerCapTokensInfoMapBySymbol;
   const tokensWithLinks = coinMarketCapEthTokensWithLinks;
   const tokens = dataFromEtherscan.map((token) => {
-    const metadata = tokensMetadata[token.symbol];
-    const tokenWithLinks = tokensWithLinks.find(item => item.symbol === token.symbol);
+    const { symbol } = token;
+    const metadata = tokensMetadata[symbol];
+    const tokenWithLinks = tokensWithLinks.find(item => item.symbol === symbol);
     const whitepaper = tokenWithLinks ? tokenWithLinks.whitepaper || '' : '';
+
+    let iconUrl = null;
+    let iconMonoUrl = null;
+
+    const iconName = symbol.toLocaleLowerCase();
+    if (iconsList.includes(iconName)) {
+      iconUrl = `asset/images/tokens/icons/${iconName}Color.png`;
+      iconMonoUrl = `asset/images/tokens/icons/${iconName}.png`;
+    }
 
     return {
       address: token.address,
       decimals: parseInt(token.decimals, 10),
       description: token.description || null,
       email: null,
-      iconMonoUrl: null,
-      iconUrl: null,
+      iconMonoUrl,
+      iconUrl,
       isDefault: false,
       isDefaultToken: false,
       name: token.name,
