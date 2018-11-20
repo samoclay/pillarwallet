@@ -51,8 +51,12 @@ const toFinalToken = (token) => {
   };
 };
 
+const findDefaultSymbols = () => {
+  return defaultAssets.map(item => item.symbol.toLocaleLowerCase());
+};
+
 const findDeltaSymbols = () => {
-  const defaultSymbols = defaultAssets.map(item => item.symbol.toLocaleLowerCase());
+  const defaultSymbols = findDefaultSymbols();
   return iconsList.filter(item => !defaultSymbols.includes(item));
 };
 
@@ -85,6 +89,18 @@ it.skip('should get delta icons', () => {
     return toFinalToken(dataFromEtherscanMap[symbol]);
   });
   console.log('delta icons:', tokens.length); // eslint-disable-line
+  fs.writeFile('delta.json', JSON.stringify(tokens));
+});
+
+it.skip('should write just new tokens to delta.json', () => {
+  const defaultSymbols = findDefaultSymbols();
+  const filteredDataFromEtherscan = dataFromEtherscan
+    .filter(asset => !defaultSymbols.includes(asset.symbol.toLowerCase()));
+
+  const tokens = filteredDataFromEtherscan.map(token => {
+    return toFinalToken(token);
+  });
+
   fs.writeFile('delta.json', JSON.stringify(tokens));
 });
 
