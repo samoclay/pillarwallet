@@ -9,6 +9,8 @@ import coinMarkerCapTokensInfoMapBySymbol from 'utils/__tests__/coinMarkerCapTok
 import dataFromEtherscan from 'utils/__tests__/dataFromEtherscan';
 import defaultAssets from 'utils/__tests__/defaultAssets';
 import iconsList from 'utils/__tests__/iconsList';
+import tokensIcons from 'utils/__tests__/tokensIcons';
+import erc20Icons from 'utils/__tests__/erc20Icons';
 
 const fs = require('fs');
 const sharp = require('sharp');
@@ -39,20 +41,29 @@ const toFinalToken = (token) => {
     iconMonoUrl,
     iconUrl,
     isDefault: false,
-    isDefaultToken: false,
+    isPreferred: false,
     name: token.name,
     symbol: token.symbol,
     telegram: null,
     twitter: metadata.urls.twitter[0] || null,
     wallpaperUrl: null,
     website: metadata.urls.website[0] || null,
-    whitepaper,
-    totalSupply: token.totalSupply,
+    whitepaper: whitepaper || null,
+
+    // totalSupply: token.totalSupply, // just for BCX team
   };
 };
 
 const findDefaultSymbols = () => {
   return defaultAssets.map(item => item.symbol.toLocaleLowerCase());
+};
+
+const getDataFromEtherscanMap = () => {
+  const dataFromEtherscanMap = {};
+  dataFromEtherscan.forEach(token => {
+    dataFromEtherscanMap[token.symbol.toLowerCase()] = token;
+  });
+  return dataFromEtherscanMap;
 };
 
 const findDeltaSymbols = () => {
@@ -92,6 +103,7 @@ it.skip('should get delta icons', () => {
   fs.writeFile('delta.json', JSON.stringify(tokens));
 });
 
+// DELTA
 it.skip('should write just new tokens to delta.json', () => {
   const defaultSymbols = findDefaultSymbols();
   const filteredDataFromEtherscan = dataFromEtherscan
@@ -101,14 +113,40 @@ it.skip('should write just new tokens to delta.json', () => {
     return toFinalToken(token);
   });
 
+  console.log('new tokens:', tokens.length);
+
   fs.writeFile('delta.json', JSON.stringify(tokens));
 });
 
+it.skip('should ...', () => {
+  const dataFromEtherscanMap = getDataFromEtherscanMap();
+
+  const tokens = defaultAssets.map(asset => {
+    const data = dataFromEtherscanMap[asset.symbol.toLowerCase()];
+    const totalSupply = data ? data.totalSupply : null;
+    return {
+      ...asset,
+      totalSupply,
+    };
+  });
+
+  fs.writeFile('_tokens.json', JSON.stringify(tokens));
+});
+
+it.skip('should return ERC20 icons', () => {
+  const marketEthTokens = coinMarketCapEthTokens.map(token => token.symbol.toLocaleLowerCase());
+  const defaultEthTokens = defaultAssets.map(token => token.symbol.toLocaleLowerCase());
+  const ethTokens = marketEthTokens.concat(defaultEthTokens);
+
+  const erc20IconsList = tokensIcons.filter(icon => ethTokens.includes(icon));
+  fs.writeFile('erc20Icons.json', JSON.stringify(erc20IconsList));
+});
+
 it.skip('should copy icons', () => {
-  const tokens = findDeltaSymbols();
+  const tokens = erc20Icons;
   tokens.forEach(token => fs
     .createReadStream(`token_logo_black_128/${token}.png`)
-    .pipe(fs.createWriteStream(`newTokens/${token}@2x.png`)),
+    .pipe(fs.createWriteStream(`newTokens/${token}@3x.png`)),
   );
   tokens.forEach(token => fs
     .createReadStream(`token_logo_color_128/${token}.png`)
@@ -119,19 +157,19 @@ it.skip('should copy icons', () => {
 it.skip('should save 64x64 resized icons x2', async () => {
   jest.setTimeout(3000000);
 
-  const tokens = findDeltaSymbols();
+  const tokens = erc20Icons;
   tokens.forEach(async (token) => {
     await fs
       .createReadStream(`token_logo_black_128/${token}.png`)
       .pipe(sharp().resize(64, 64))
-      .pipe(fs.createWriteStream(`newTokensResized/${token}@2x.png`));
+      .pipe(fs.createWriteStream(`newTokens/${token}@2x.png`));
   });
 
   tokens.forEach(async (token) => {
     await fs
       .createReadStream(`token_logo_color_128/${token}.png`)
       .pipe(sharp().resize(64, 64))
-      .pipe(fs.createWriteStream(`newTokensResized/${token}Color@2x.png`));
+      .pipe(fs.createWriteStream(`newTokens/${token}Color@2x.png`));
   });
 });
 

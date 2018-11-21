@@ -22,6 +22,7 @@
         ethTokens.push({
           name: $(item).find('a.currency-name-container').text(),
           symbol: $(item).find('span.currency-symbol a.link-secondary').text(),
+          volume24h: $(item).find('a.volume').attr('data-usd'),
           url:  'https://coinmarketcap.com' + $(item).find('a.currency-name-container').attr('href'),
         });
       });
