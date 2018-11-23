@@ -584,13 +584,13 @@ workflows:
             branches:
               only:
                   - develop
-#      - dev_build_android:
-#          requires:
-#            - build-and-test
-#          filters:
-#            branches:
-#              only:
-#                  - develop
+      - dev_build_android:
+          requires:
+            - build-and-test
+          filters:
+            branches:
+              only:
+                  - develop
       - stage_ios:
           requires:
             - build

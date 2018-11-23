@@ -17,68 +17,189 @@ default_platform(:android)
 
 platform :android do
 
-  desc "Deploy a new version to the Google Play Staging Test Track"
-  lane :deploy_staging do
-    changelog_from_git_commits(
-     merge_commit_filtering: 'exclude_merges'
-    )
-    upload_to_play_store(
-      track: 'internal',
-      apk: 'app/build/outputs/apk/app-prod-staging.apk',
-      json_key_data: ENV['GOOGLE_JSON_DATA'],
-      package_name: 'com.pillarproject.wallet.staging',
-      skip_upload_aab: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true
+  desc "Runs all the tests"
+  lane :test do
+    gradle(
+      task: 'app:test',
+      flags: '--no-daemon'
     )
   end
 
-  desc "Deploy a new version to the Google Play Internal Test Track"
-  lane :deploy_internal do
-    changelog_from_git_commits(
-     merge_commit_filtering: 'exclude_merges'
-    )
-    upload_to_play_store(
-      track: 'internal',
-      apk: 'app/build/outputs/apk/app-prod-release.apk',
-      json_key_data: ENV['GOOGLE_JSON_DATA'],
-      package_name: 'com.pillarproject.wallet',
-      skip_upload_aab: true,
-      skip_upload_images: true,
-      skip_upload_screenshots: true
+  lane :deploy_dev_build do
+    brandBuild(
+      flavorName: 'dev',
+      hockeyAppToken: ENV["HOCKEYAPP_UPLOAD_TOKEN"],
+      apkName: 'app-dev-circleci.apk'
     )
   end
 
-  desc "Deploy a new alpha version to the Google Play Store Alpha Track"
-  lane :deploy_alpha do
-  changelog_from_git_commits(
-   merge_commit_filtering: 'exclude_merges'
-  )
-	upload_to_play_store(
-		track: "alpha",
-    apk: 'app/build/outputs/apk/app-prod-release.apk',
-    json_key_data: ENV['GOOGLE_JSON_DATA'],
-    package_name: 'com.pillarproject.wallet',
-    skip_upload_aab: true,
-    skip_upload_images: true,
-    skip_upload_screenshots: true
-	)
+  lane :deploy_staging_build do
+    brandBuild(
+      flavorName: 'staging',
+      hockeyAppToken: ENV["HOCKEYAPP_UPLOAD_TOKEN"],
+      apkName: 'app-staging-circleci.apk'
+    )
   end
 
-  desc "Deploy a new beta version to the Google Play Store Beta Track"
-  lane :deploy_beta do
-  changelog_from_git_commits(
-   merge_commit_filtering: 'exclude_merges'
-  )
-  upload_to_play_store(
-    track: "beta",
-    apk: 'app/build/outputs/apk/app-prod-release.apk',
-    json_key_data: ENV['GOOGLE_JSON_DATA'],
-    package_name: 'com.pillarproject.wallet',
-    skip_upload_aab: true,
-    skip_upload_images: true,
-    skip_upload_screenshots: true
-  )
+  lane :build_custom_changelog do
+    changelog_notes = changelog_from_git_commits(
+      merge_commit_filtering: "only_include_merges"
+    )
+
+    custom_changelog = ""
+
+    pr_merges = changelog_notes.split(/Merge/)
+
+    pr_merges = pr_merges.grep(/\.*pull request\.*/)
+
+    pr_merges = pr_merges.reject { |text| text.match(/Merge.from/) }
+
+    pr_merges.each do |merge_text|
+
+        pr_number = merge_text.match(/pull request [#]([0-9]+).*/i).captures[0]
+
+        result = github_api(
+          api_token: ENV["GITHUB_TOKEN"],
+          http_method: "GET",
+          path: "/repos/pillarwallet/pillarwallet/pulls/#{pr_number}"
+        )
+
+        pr_body = "#{result[:json]['body']}"
+
+        custom_changelog << "- #{result[:json]['title']}"
+
+        unless pr_body.nil? || pr_body.empty? then
+          custom_changelog << "\n#{pr_body.indent(4)}"
+        end
+
+        custom_changelog << "\n"
+
+    end
+
+    UI.message "Changelog: #{custom_changelog}"
+
+    custom_changelog
+  end
+
+  private_lane :brandBuild do |options|
+
+    # clean
+    gradle(
+      task: 'clean',
+      flags: '--no-daemon'
+    )
+
+    # build the release variant
+    gradle(
+      task: 'assemble',
+      build_type: 'circleci',
+      flavor: options[:flavorName],
+      flags: '--no-daemon'
+    )
+
+    # Generate the changelog based on commit messages since your last tag
+    changelog = build_custom_changelog
+
+    lastCommit = last_git_commit
+
+    hockey(
+      api_token: options[:hockeyAppToken],
+      notes: changelog,
+      commit_sha: lastCommit[:commit_hash],
+      notify: "1",
+      apk: "app/build/outputs/apk/#{options[:apkName]}"
+    )
+
+  end
+
+  desc "Deploy a new version to Google Play Store"
+  lane :release do |options|
+
+    release_branch = 'master'
+
+    ensure_git_branch(
+      branch: release_branch
+    )
+
+    # clean
+    gradle(
+      task: 'clean'
+    )
+
+    # Generate the changelog based on commit messages since your last tag
+    changelog = build_custom_changelog
+
+    appVersionName = get_version_name(app_folder_name:"app")
+
+    properties = property_file_read(file: "./version.properties")
+
+    appBuildNumber = properties["build"]
+
+    full_version = appVersionName+"_"+appBuildNumber
+
+    flavors_for_release = ["productionServer"]
+
+    flavors_apk_for_release = ["productionServer"]
+
+    files_to_upload = []
+
+    lastCommit = last_git_commit
+
+    flavors_for_release.each_with_index do |flavors, index|
+       flavors_apk = flavors_apk_for_release[index]
+
+       # build the release variant
+       gradle(
+         task: 'assemble',
+         build_type: 'Release',
+         flavor: flavors,
+         flags: '--no-daemon'
+       )
+
+       #mapping_file = "./app/build/outputs/mapping/#{flavors}/release/#{flavors_apk}-mapping.txt"
+       apk_file = "./app/build/outputs/apk/#{options[:apkName]}"
+
+       files_to_upload << apk_file
+       #File.rename("../app/build/outputs/mapping/#{flavors}/release/mapping.txt", ".#{mapping_file}")
+       #files_to_upload << mapping_file
+
+       hockey(
+         api_token: ENV["HOCKEYAPP_UPLOAD_TOKEN"],
+         notes: changelog,
+         commit_sha: lastCommit[:commit_hash],
+         notify: "1",
+         apk: apk_file
+         #dsym: mapping_file
+       )
+    end
+
+    UI.message("Upload files: #{files_to_upload}")
+
+    set_github_release(
+     repository_name: "pillarwallet/pillarwallet",
+     api_token: ENV["GITHUB_TOKEN"],
+     name: "v#{full_version}",
+     tag_name: "v#{full_version}",
+     description: changelog,
+     upload_assets: files_to_upload,
+     commitish: release_branch
+   )
+
+  end
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
   end
 
 end
