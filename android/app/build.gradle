@@ -81,6 +81,10 @@ android {
     devRemoteKernel {
       minSdkVersion 21
     }
+    staging {
+      minSdkVersion 21
+      applicationIdSuffix ".staging"
+    }
     dev19 {
       // For debugging / development on older SDK versions. Increases build
       // time so use 'dev' if not running on older SDKs.
@@ -95,10 +99,9 @@ android {
     debug {
       debuggable true
     }
-    staging {
+    circleci {
       buildConfigField "String", "CODEPUSH_KEY", '"com.pillarproject.wallet"'
       signingConfig signingConfigs.staging
-      applicationIdSuffix ".staging"
       minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
       zipAlignEnabled true
