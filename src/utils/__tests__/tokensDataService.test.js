@@ -102,38 +102,38 @@ it.skip('should copy icons', () => {
   );
 });
 
-it.skip('should save 64x64 resized icons x2', async () => {
+it.skip('should save 64x64 resized icons x2', () => {
   jest.setTimeout(3000000);
 
   const tokens = erc20Icons;
-  tokens.forEach(async (token) => {
-    await fs
+  tokens.forEach((token) => {
+    fs
       .createReadStream(`token_logo_black_128/${token}.png`)
       .pipe(sharp().resize(64, 64))
       .pipe(fs.createWriteStream(`newTokens/${token}@2x.png`));
   });
 
-  tokens.forEach(async (token) => {
-    await fs
+  tokens.forEach((token) => {
+    fs
       .createReadStream(`token_logo_color_128/${token}.png`)
       .pipe(sharp().resize(64, 64))
       .pipe(fs.createWriteStream(`newTokens/${token}Color@2x.png`));
   });
 });
 
-it.skip('should save 32x32 icons', async () => {
+it.skip('should save 32x32 icons', () => {
   jest.setTimeout(3000000);
 
   const tokens = erc20Icons;
-  tokens.forEach(async (token) => {
-    await fs
+  tokens.forEach((token) => {
+    fs
       .createReadStream(`token_logo_black_128/${token}.png`)
       .pipe(sharp().resize(32, 32))
       .pipe(fs.createWriteStream(`newTokens/${token}.png`));
   });
 
-  tokens.forEach(async (token) => {
-    await fs
+  tokens.forEach((token) => {
+    fs
       .createReadStream(`token_logo_color_128/${token}.png`)
       .pipe(sharp().resize(32, 32))
       .pipe(fs.createWriteStream(`newTokens/${token}Color.png`));
