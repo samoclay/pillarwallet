@@ -583,7 +583,7 @@ workflows:
           filters:
             branches:
               only:
-                  - feature/fastlane_and_hockey
+                  - develop
       - dev_build_android:
           requires:
             - build-and-test
