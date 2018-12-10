@@ -14,6 +14,7 @@ type ToastOptions = {
   type: string,
   message: string,
   title?: ?string,
+  zIndex?: number,
 };
 
 type State = {
@@ -26,6 +27,7 @@ const toastInitialOptions = {
   autoClose: true,
   type: 'info',
   message: '',
+  zIndex: 1000,
 };
 
 const typeColors = {
@@ -64,7 +66,7 @@ const ToastWrapper = styled.View`
   shadow-opacity: 0.25;
   shadow-radius: 10;
   elevation: 9;
-  z-index: 1000;
+  z-index: ${props => props.zIndex};
   justify-content: center;
   align-items: center;
 `;
@@ -165,6 +167,7 @@ export default class Toast extends React.Component<{}, State> {
         }}
         opacity={+!!this.state.toastOptions.message}
         borderColor={typeColors[toastOptions.type]}
+        zIndex={this.state.toastOptions.zIndex}
       >
         <ToastHolder>
           <IconHolder>

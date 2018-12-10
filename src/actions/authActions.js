@@ -22,6 +22,7 @@ import Storage from 'services/storage';
 import { navigate, getNavigationState } from 'services/navigation';
 import ChatService from 'services/chat';
 import firebase from 'react-native-firebase';
+import Intercom from 'react-native-intercom';
 import { setupSentryAction } from 'actions/appActions';
 import { saveDbAction } from './dbActions';
 
@@ -58,6 +59,7 @@ export const loginAction = (pin: string) => {
       });
 
       const fcmToken = await firebase.messaging().getToken().catch(() => null);
+      await Intercom.sendTokenToIntercom(fcmToken);
       chat.init({
         userId: user.id,
         username: user.username,

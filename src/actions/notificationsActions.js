@@ -46,6 +46,20 @@ export const startListeningIntercomNotificationsAction = () => {
     const { username } = user;
     Intercom.registerIdentifiedUser({ userId: username });
     Intercom.updateUser({ user_id: username, name: username });
+    firebase.messaging().onMessage((message) => {
+      if (!message._data || !Object.keys(message._data).length) return;
+      const messageData = message._data;
+      if (!messageData.intercom_push_type) return;
+      dispatch(({
+        type: ADD_NOTIFICATION,
+        payload: {
+          message: messageData.body,
+          autoClose: false,
+          zIndex: 999,
+          type: 'info',
+        },
+      }));
+    });
     intercomNotificationsListener = ({ count }) => dispatch({
       type: UPDATE_INTERCOM_NOTIFICATIONS_COUNT,
       payload: count,
