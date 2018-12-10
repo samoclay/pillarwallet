@@ -32,6 +32,7 @@ let notificationsListener = null;
 let disabledPushNotificationsListener;
 let notificationsOpenerListener = null;
 let intercomNotificationsListener = null;
+let intercomNotificationMessagesListener = null;
 
 const NOTIFICATION_ROUTES = {
   [CONNECTION]: PEOPLE,
@@ -46,7 +47,7 @@ export const startListeningIntercomNotificationsAction = () => {
     const { username } = user;
     Intercom.registerIdentifiedUser({ userId: username });
     Intercom.updateUser({ user_id: username, name: username });
-    firebase.messaging().onMessage((message) => {
+    intercomNotificationMessagesListener = firebase.messaging().onMessage((message) => {
       if (!message._data || !Object.keys(message._data).length) return;
       const messageData = message._data;
       if (!messageData.intercom_push_type) return;
@@ -75,6 +76,10 @@ export const startListeningIntercomNotificationsAction = () => {
 export const stopListeningIntercomNotificationsAction = () => {
   return () => {
     if (!intercomNotificationsListener) return;
+    if (intercomNotificationMessagesListener) {
+      intercomNotificationMessagesListener();
+      intercomNotificationMessagesListener = null;
+    }
     Intercom.logout();
     Intercom.removeEventListener(Intercom.Notifications.UNREAD_COUNT, intercomNotificationsListener);
   };
