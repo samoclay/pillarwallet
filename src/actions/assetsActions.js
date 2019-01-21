@@ -32,6 +32,7 @@ import { transformAssetsToObject } from 'utils/assets';
 import { delay, noop, uniqBy } from 'utils/common';
 import { buildHistoryTransaction } from 'utils/history';
 import { saveDbAction } from './dbActions';
+import { RadixSimpleIdentity } from 'radixdlt';
 
 type TransactionStatus = {
   isSuccess: boolean,
@@ -202,6 +203,35 @@ export const fetchAssetsBalancesAction = (assets: Assets, walletAddress: string)
     }
   };
 };
+
+export const getTestnetRadsAction = (fromAccount: RadixSimpleIdentity) => {
+  return async (dispatch: Function, getState: () => Object, api: Object) => {
+    
+    const { user: { data: { walletId } } } = getState();
+    
+    dispatch({
+      type: UPDATE_ASSETS_STATE,
+      payload: FETCHING_INITIAL,
+    });
+
+    // thus `delay` was copied from `fetchInitialAssetsAction`, You probably want to remove that delay and solve it :)
+    // await delay(1000);
+    const testnetRadsUnparsed = await api.getTestnetRads(fromAccount);
+    if (testnetRadsUnparsed) {
+
+      // Fix this! Not sure about format, looks like a touple?
+      const parsedRad = DO_SOME_PARSING( testnetRadsUnparsed )
+      const radBalance = {
+        balance: parsedRad,
+        symbol: "XRD"
+      }
+      const transformedBalances = transformAssetsToObject([radBalance]);
+      dispatch(saveDbAction('balances', { balances: transformedBalances }, true));
+      dispatch({ type: UPDATE_BALANCES, payload: transformedBalances });
+    }
+  };
+};
+
 
 export const fetchInitialAssetsAction = (walletAddress: string) => {
   return async (dispatch: Function, getState: () => Object, api: Object) => {

@@ -26,6 +26,8 @@ import { toastWalletBackup } from 'utils/toasts';
 import { updateOAuthTokensCB } from 'utils/oAuth';
 import { setupSentryAction } from 'actions/appActions';
 import { saveDbAction } from './dbActions';
+import type { Wallet } from  'reducers/walletReducer';
+import { RadixKeyPair, RadixAccount, RadixIdentityManager, RadixSimpleIdentity, RadixUniverse, radixUniverse } from 'radixdlt';
 
 const Crashlytics = firebase.crashlytics();
 
@@ -47,6 +49,9 @@ export const loginAction = (pin: string) => {
     try {
       const wallet = await ethers.Wallet.RNfromEncryptedWallet(JSON.stringify(encryptedWallet), saltedPin);
 
+      radixUniverse.bootstrap(RadixUniverse.ALPHANET);
+      let radixKeyPair = RadixKeyPair.fromPrivate(wallet.privateKey);
+      let radixSimpleIdentity = new RadixSimpleIdentity(radixKeyPair);
       let { user = {} } = await storage.get('user');
       const userState = user.walletId ? REGISTERED : PENDING;
       if (userState === REGISTERED) {
@@ -85,7 +90,8 @@ export const loginAction = (pin: string) => {
         type: DECRYPT_WALLET,
         payload: {
           address: wallet.address,
-        },
+          radixIdentity: radixSimpleIdentity
+        }
       });
       if (!__DEV__) {
         dispatch(setupSentryAction(user, wallet));

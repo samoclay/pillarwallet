@@ -129,6 +129,7 @@
     "process": "^0.11.0",
     "protobufjs": "^6.8.8",
     "querystring-es3": "~0.2.0",
+    "radixdlt": "^1.0.6-alpha",
     "react": "16.4.1",
     "react-native": "0.56.0",
     "react-native-background-timer": "2.1.0-alpha.6",

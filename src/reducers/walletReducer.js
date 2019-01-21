@@ -20,9 +20,11 @@ import {
   UPDATE_WALLET_IMPORT_STATE,
   BACKUP_WALLET,
 } from 'constants/walletConstants';
+import { RadixSimpleIdentity } from 'radixdlt';
 
 export type Wallet = {
   address: string,
+  radixIdentity: RadixSimpleIdentity,
   privateKey: string
 }
 
@@ -45,7 +47,8 @@ export type WalletReducerAction = {
 const initialState = {
   data: {
     address: '',
-    privateKey: '',
+    radixIdentity: null,
+    privateKey: ''
   },
   onboarding: {
     mnemonic: {

@@ -23,7 +23,9 @@ import type { OAuthTokens } from 'utils/oAuth';
 
 // temporary here
 import { icoFundingInstructions as icoFundingInstructionsFixtures } from 'fixtures/icos';
-
+import { RadixSimpleIdentity, RadixAccount, RadixTransactionBuilder } from 'radixdlt';
+import {fromPromise} from 'rxjs/observable/fromPromise';
+import {catchError, flatMap, filter} from 'rxjs/operators';
 const USERNAME_EXISTS_ERROR_CODE = 409;
 
 type HistoryPayload = {
@@ -200,6 +202,26 @@ SDKWrapper.prototype.assetsSearch = function (query: string, walletId: string) {
     .then(() => this.pillarWalletSdk.asset.search({ query, walletId }))
     .then(({ data }) => data)
     .catch(() => []);
+};
+
+
+SDKWrapper.prototype.getTestnetRads = function (fromIdentity: RadixSimpleIdentity) {
+    const myAccount = fromIdentity.account;
+    const faucetAccount = RadixAccount.fromAddress('9egHejbV2z1p1Luy2mER4BXsaHbyM67LdaLrUoJ9YSFRGCw1XPC');
+    myAccount.openNodeConnection();
+    
+    // This could be any message really....
+    const message = 'Send me some money, pretty please!';
+
+    // Not sure how you flatMap in RxJS, but that is what you wanna do. First send that message, which will 
+    // fail if you call it too often. So disregarding of status, even for fail, follow up with fetching the 
+    // balance by calling `myAccount.transferSystem.balance`
+    return RadixTransactionBuilder
+      .createRadixMessageAtom(myAccount, faucetAccount, message)
+      .signAndSubmit(fromIdentity).
+      flatMap {
+        return myAccount.transferSystem.balance
+      }
 };
 
 SDKWrapper.prototype.fetchNotifications = function (walletId: string, type: string, fromTimestamp?: string) {

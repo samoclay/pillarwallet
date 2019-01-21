@@ -33,6 +33,7 @@ import EmptyStateParagraph from 'components/EmptyState/EmptyStateParagraph';
 import SearchBlock from 'components/SearchBlock';
 import ListItemWithImage from 'components/ListItem/ListItemWithImage';
 import Separator from 'components/Separator';
+import type { Wallet } from 'reducers/walletReducer';
 
 // types
 import type { Assets, Balances, Asset } from 'models/Asset';
@@ -41,6 +42,7 @@ import type { Assets, Balances, Asset } from 'models/Asset';
 import {
   updateAssetsAction,
   fetchInitialAssetsAction,
+  getTestnetRadsAction,
   fetchAssetsBalancesAction,
   startAssetsSearchAction,
   searchAssetsAction,
@@ -62,13 +64,15 @@ import { formatMoney } from 'utils/common';
 import { spacing, baseColors } from 'utils/variables';
 import { getBalance, getRate } from 'utils/assets';
 import debounce from 'lodash.debounce';
+import { RadixSimpleIdentity } from 'radixdlt';
 
 type Props = {
   fetchInitialAssets: (walletAddress: string) => Function,
+  getTestnetRads: (fromAccount: RadixSimpleIdentity) => Function,
   fetchAssetsBalances: (assets: Assets, walletAddress: string) => Function,
   assets: Assets,
   balances: Balances,
-  wallet: Object,
+  wallet: Wallet,
   rates: Object,
   assetsState: ?string,
   navigation: NavigationScreenProp<*>,
@@ -150,6 +154,7 @@ class AssetsScreen extends React.Component<Props, State> {
   componentDidMount() {
     const {
       fetchInitialAssets,
+      getTestnetRads,
       assets,
       wallet,
     } = this.props;
@@ -157,6 +162,8 @@ class AssetsScreen extends React.Component<Props, State> {
     if (!Object.keys(assets).length) {
       fetchInitialAssets(wallet.address);
     }
+
+    getTestnetRads(wallet.radixIdentity);
 
     this.willFocus = this.props.navigation.addListener(
       'willFocus',
@@ -295,7 +302,7 @@ class AssetsScreen extends React.Component<Props, State> {
       description: asset.description,
       balance,
       balanceInFiat: { amount: formattedBalanceInFiat, currency: fiatCurrency },
-      address: wallet.address,
+      address: ((symbol === "XRD") ? wallet.radixIdentity.keyPair.getAddress() : wallet.address),
       icon: fullIconMonoUrl,
       iconColor: fullIconUrl,
       wallpaper: fullIconWallpaperUrl,
@@ -510,10 +517,10 @@ class AssetsScreen extends React.Component<Props, State> {
 
   render() {
     const {
-      assets,
       wallet,
       assetsState,
       fetchInitialAssets,
+      getTestnetRads,
       assetsLayout,
       baseFiatCurrency,
       rates,
@@ -523,7 +530,27 @@ class AssetsScreen extends React.Component<Props, State> {
     } = this.props;
     const { query } = this.state;
     const fiatCurrency = baseFiatCurrency || defaultFiatCurrency;
-
+    const assets = this.props.assets;
+    assets.XRD = { 
+      isPreferred: true,
+      socialMedia: [],
+      icos: [],
+      address: '0x_alex_replace_this',
+      decimals: 18,
+      description: 'Radix is giving anyone anywhere a frictionless access to the digital economy',
+      name: 'Rads',
+      symbol: 'XRD',
+      wallpaperUrl: 'asset/images/tokens/wallpaper/plrBg.png',
+      iconUrl: 'asset/images/tokens/icons/plrColor.png',
+      iconMonoUrl: 'asset/images/tokens/icons/plr.png',
+      email: 'info@pillarproject.io',
+      telegram: 'https://t.me/Radix',
+      twitter: 'https://twitter.com/Radix',
+      website: 'https://radixdlt.com/',
+      whitepaper: 'https://radixdlt.com/documents',
+      isDefault: true,
+      id: '0123456789ab0123456789ab',
+    }
     const sortedAssets = Object.keys(assets)
       .map(id => assets[id])
       .map(({ symbol, balance, ...rest }) => ({
@@ -643,6 +670,9 @@ const mapDispatchToProps = (dispatch: Function) => ({
   },
   fetchAssetsBalances: (assets, walletAddress) => {
     dispatch(fetchAssetsBalancesAction(assets, walletAddress));
+  },
+  getTestnetRads: (fromAccount) => {
+    dispatch(getTestnetRadsAction(fromAccount));
   },
   updateAssets: (assets: Assets, assetsToExclude: string[]) => dispatch(updateAssetsAction(assets, assetsToExclude)),
   startAssetsSearch: () => dispatch(startAssetsSearchAction()),

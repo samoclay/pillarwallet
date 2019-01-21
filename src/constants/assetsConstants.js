@@ -18,6 +18,7 @@ export const UPDATE_SUPPORTED_ASSETS = 'UPDATE_SUPPORTED_ASSETS';
 export const UPDATE_BALANCES = 'UPDATE_BALANCES';
 export const ETH = 'ETH';
 export const PLR = 'PLR';
+export const XRD = 'XRD';
 export const EUR = 'EUR';
 export const GBP = 'GBP';
 export const USD = 'USD';

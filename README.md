@@ -21,8 +21,29 @@ _note_: XCode 10 includes CommonCrypto as part of the sdk which triggers a `Rede
 currently there's a fix being tested to work with XCode 10 and XCode 9.4, however while this note is here please use *XCode 9.4*
 
 ## Install and Run
-To get started clone the repo and run
+To get started clone the repo and run:
 
+### React-Native-Debugger
+`brew update && brew cask install react-native-debugger`
+
+### NPMRC
+Our build artificates are hosted at jfrog
+
+You need a JFrog user, ask your colleage to create one for you, *also make sure you have the correct read permissions in JFrog*. You need a session to JFrog in order to install the Pillar build artifacts. You can take a at [JFrog documentation here](
+https://www.jfrog.com/confluence/display/RTF/Npm+Registry#NpmRegistry-UsingBasicAuthentication)
+
+Standing in the project root directory, run:
+```bash
+curl -u "USERNAME:PASSWORD" https://pillarproject.jfrog.io/pillarproject/api/npm/auth > .npmrc
+```
+
+You can verify that you've got a valid auth token by running:
+```bash
+more .npmrc | grep "_auth"
+```
+A token should show up.
+
+### Node dependecies
 `yarn install`
 
 This will download all the necessary packages to build the project. The project can be deployed using the simple command of `yarn start`. This will get your project running in development mode.
@@ -30,6 +51,14 @@ This will download all the necessary packages to build the project. The project 
 _note_: if you want to keep the `metro server` running on its own console just run `yarn start`
 
 **Running on iOS:**
+
+Make sure you have cocoapods installed.
+`brew install cocoapods`
+
+Install pods
+`cd ios`
+`pod install`
+go back to project root.
 
 The project may be run from the directory using
 

@@ -11,7 +11,8 @@ import reducer from '../walletReducer';
 
 const mockWallet: Object = {
   address: '0x',
-  privateKey: '',
+  radixIdentity: null,
+  privateKey: ''
 };
 const mockOnboarding: Object = {
   confirmedPin: '',
