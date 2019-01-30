@@ -272,6 +272,7 @@ export const searchAssetsAction = (query: string) => {
     const { user: { data: { walletId } } } = getState();
 
     const assets = await api.assetsSearch(query, walletId);
+    if (!Array.isArray(assets)) return;
 
     dispatch({
       type: UPDATE_ASSETS_SEARCH_RESULT,
@@ -296,6 +297,8 @@ export const checkForMissedAssetsAction = (transactionNotifications: Object[]) =
     let walletSupportedAssets = [...supportedAssets];
     if (!supportedAssets.length) {
       walletSupportedAssets = await api.fetchSupportedAssets(walletId);
+      if (!Array.isArray(walletSupportedAssets)) return;
+
       dispatch({
         type: UPDATE_SUPPORTED_ASSETS,
         payload: walletSupportedAssets,

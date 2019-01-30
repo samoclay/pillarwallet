@@ -74,7 +74,7 @@ class SendTokenContacts extends React.Component<Props, State> {
       symbol,
     } = navigation.getParam('transactionPayload', {});
 
-    const contact = contacts.find(({ ethAddress }) => to.toUpperCase() === ethAddress.toUpperCase());
+    const contact = contacts.find(({ ethAddress = '' }) => to.toUpperCase() === ethAddress.toUpperCase());
     const recipientUsername = getUserName(contact);
     return (
       <React.Fragment>

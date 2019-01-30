@@ -213,6 +213,8 @@ class EventDetails extends React.Component<Props, {}> {
         note,
       } = txInfo;
 
+      if (!myAddress) return null;
+
       const isReceived = to.toUpperCase() === myAddress.toUpperCase();
       let transactionNote = note;
       if (txNotes && txNotes.length > 0) {
