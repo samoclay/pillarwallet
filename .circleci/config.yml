@@ -765,7 +765,7 @@ workflows:
           filters:
             branches:
               only:
-                  - develop
+                  - fix/remove-arm64e-lipo
       - dev_build_android:
           requires:
             - build-and-test
