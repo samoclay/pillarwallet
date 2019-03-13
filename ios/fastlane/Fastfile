@@ -64,7 +64,8 @@ platform :ios do
       workspace: "pillarwallet.xcworkspace",
       configuration: "Staging.Release",
       scheme: "Staging",
-      clean: false
+      clean: true,
+      derived_data_path: "build"
     )
 
     # download the signing cert
