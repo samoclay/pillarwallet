@@ -442,8 +442,8 @@ jobs:
       - run:
            name: Announce Deployment
            command: |
-             chmod +x .circleci/announceDeployment.sh
-             .circleci/announceDeployment.sh "Pillar Wallet" "Production TestFlight"
+             chmod +x .circleci/announceProdBuilds.sh
+             .circleci/announceProdBuilds.sh "Pillar Wallet" "Production TestFlight"
       - run:
           name: Copy production iOS artifact to S3
           command: |
@@ -590,8 +590,8 @@ jobs:
           name: Announce Deployment
           command: |
             cd ~/pillarwallet
-            chmod +x .circleci/announceDeployment.sh
-            .circleci/announceDeployment.sh "Pillar Wallet" "Production Google Play Store"
+            chmod +x .circleci/announceProdBuilds.sh
+            .circleci/announceProdBuilds.sh "Pillar Wallet" "Production Google Play Store"
       - run:
           name: Announce Prod Android URL
           command: |
@@ -754,7 +754,7 @@ workflows:
           filters:
             branches:
               only:
-                  - master
+                  - xcode10-build
       - build-and-test
       - whitesource:
           requires:
@@ -765,7 +765,7 @@ workflows:
           filters:
             branches:
               only:
-                  - develop
+                  - xcode10-build
       - dev_build_android:
           requires:
             - build-and-test
@@ -779,7 +779,7 @@ workflows:
           filters:
             branches:
               only:
-                  - master
+                  - xcode10-build
       - stage_android:
           requires:
             - build
