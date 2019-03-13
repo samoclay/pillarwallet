@@ -765,7 +765,7 @@ workflows:
           filters:
             branches:
               only:
-                  - xcode10-build
+                  - develop
       - dev_build_android:
           requires:
             - build-and-test
