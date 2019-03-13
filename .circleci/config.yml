@@ -754,7 +754,7 @@ workflows:
           filters:
             branches:
               only:
-                  - xcode10-build
+                  - fix/xcode10-clean-false
       - build-and-test
       - whitesource:
           requires:
@@ -779,7 +779,7 @@ workflows:
           filters:
             branches:
               only:
-                  - xcode10-build
+                  - fix/xcode10-clean-false
       - stage_android:
           requires:
             - build
