@@ -65,7 +65,8 @@ platform :ios do
       configuration: "Staging.Release",
       scheme: "Staging",
       clean: true,
-      derived_data_path: "build"
+      derived_data_path: "build",
+      xcargs: "-jobs 1"
     )
 
     # download the signing cert
