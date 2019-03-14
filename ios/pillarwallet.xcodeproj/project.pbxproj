@@ -1812,6 +1812,7 @@
 				PROVISIONING_PROFILE = "56f20096-3a84-4e04-a83a-ad8a485d962a";
 				PROVISIONING_PROFILE_SPECIFIER = "match Development com.pillarproject.wallet 1530870110";
 				REACT_HEADERS_PATH = "$(BUILD_DIR)/Release-$(PLATFORM_NAME)/include";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../node_modules/rn-signal-protocol-messaging/ios/SignalMessagingSwift/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "pillarwallet-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -1864,6 +1865,7 @@
 				PROVISIONING_PROFILE = "c9895f88-22c3-4b0e-b12d-dd463187c3c8";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.pillarproject.wallet 1526587087";
 				REACT_HEADERS_PATH = "$(BUILD_DIR)/Release-$(PLATFORM_NAME)/include";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../node_modules/rn-signal-protocol-messaging/ios/SignalMessagingSwift/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "pillarwallet-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -2058,6 +2060,7 @@
 				PROVISIONING_PROFILE = "1736ad49-49b1-456f-8bb5-977f029a2cbe";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.pillarproject.wallet.staging";
 				REACT_HEADERS_PATH = "$(BUILD_DIR)/Release-$(PLATFORM_NAME)/include";
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/../node_modules/rn-signal-protocol-messaging/ios/SignalMessagingSwift/**";
 				SWIFT_OBJC_BRIDGING_HEADER = "pillarwallet-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
