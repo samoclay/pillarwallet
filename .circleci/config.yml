@@ -336,7 +336,7 @@ jobs:
           name: Upload to TestFlight
           command: |
             export buildNumber=$(cat ~/pillarwallet/buildNumber.txt)
-            cd ios && fastlane deploy_staging build_number:$buildNumber
+            cd ios && sudo fastlane deploy_staging build_number:$buildNumber
       - run:
            name: Announce Deployment
            command: |
