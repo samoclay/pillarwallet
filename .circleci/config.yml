@@ -325,9 +325,9 @@ jobs:
 #      - run:
 #          name: Create Vendor/bundle for gem dependencies
 #          command: cd ios && bundle check || bundle install --path vendor/bundle
-#      - run:
-#          name: Install fastlane as a dependency
-#          command: cd ios && sudo bundle update
+      - run:
+          name: Install fastlane as a dependency
+          command: cd ios && sudo bundle update
       - save_cache:
           key: ios-gems-{{ checksum "./ios/Gemfile" }}
           paths:
