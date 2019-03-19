@@ -301,7 +301,7 @@ jobs:
           name: Install node dependencies
           command: yarn install
       - save_cache:
-          key: ios-node-{{ checksum "./yarn.lock" }}
+          key: v1-ios-node-{{ checksum "./yarn.lock" }}
           paths:
             - ~/nodes_modules
       - restore_cache:
@@ -322,12 +322,12 @@ jobs:
           command: sudo gem install bundler
       - restore_cache:
           key: ios-gems-{{ checksum "./ios/Gemfile" }}
-#      - run:
-#          name: Create Vendor/bundle for gem dependencies
-#          command: cd ios && bundle check || bundle install --path vendor/bundle
-#      - run:
-#          name: Install fastlane as a dependency
-#          command: cd ios && sudo bundle update
+      - run:
+          name: Create Vendor/bundle for gem dependencies
+          command: cd ios && bundle check || bundle install --path vendor/bundle
+      - run:
+          name: Install fastlane as a dependency
+          command: cd ios && sudo bundle update
       - save_cache:
           key: ios-gems-{{ checksum "./ios/Gemfile" }}
           paths:
@@ -336,7 +336,7 @@ jobs:
           name: Upload to TestFlight
           command: |
             export buildNumber=$(cat ~/pillarwallet/buildNumber.txt)
-            cd ios && sudo fastlane deploy_staging build_number:$buildNumber
+            cd ios && bundle exec fastlane deploy_staging build_number:$buildNumber
       - run:
            name: Announce Deployment
            command: |
