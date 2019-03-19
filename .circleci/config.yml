@@ -305,7 +305,7 @@ jobs:
           paths:
             - ~/nodes_modules
       - restore_cache:
-          key: ios-pods-{{ checksum "./ios/Podfile.lock" }}
+          key: ios-pods-v2-{{ checksum "./ios/Podfile.lock" }}
       - run:
           name: Fetch CocoaPods Specs
           command: |
@@ -314,7 +314,7 @@ jobs:
           name: Install CocoaPods
           command: cd ios && pod install --verbose
       - save_cache:
-          key: ios-pods-{{ checksum "./ios/Podfile.lock" }}
+          key: ios-pods-v2-{{ checksum "./ios/Podfile.lock" }}
           paths:
             - ./ios/Pods
       - run:
