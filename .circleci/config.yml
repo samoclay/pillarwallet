@@ -102,7 +102,7 @@ aliases:
 defaults_ios: &defaults_ios
   working_directory: ~/pillarwallet
   macos:
-    xcode: "10.2.0"
+    xcode: "10.1.0"
   environment:
     FL_OUTPUT_DIR: output
     _JAVA_OPTIONS: "-Xms128m -Xmx3024m"
@@ -281,7 +281,7 @@ jobs:
   stage_ios:
     working_directory: ~/pillarwallet
     macos:
-      xcode: "10.2.0"
+      xcode: "10.1.0"
     environment:
       FL_OUTPUT_DIR: output
     shell: /bin/bash --login -o pipefail
@@ -294,14 +294,10 @@ jobs:
           name: Install AWS CLI
           command: sudo pip install awscli
       - run:
-          name: Install xcversion
-          command: sudo gem install xcode-install
-      - run:
-          name: Uninstall container Xcode
-          command: xcversion uninstall 10.2
-      - run:
-          name: Install Xcode 10.2
-          command: xcversion install 10.2
+          name: Install RN dependencies
+          command: |
+            brew update
+            brew install watchman
       - run:
           name: Append circleCI build number to version
           command: |
@@ -534,7 +530,7 @@ jobs:
   prod_ios:
     working_directory: ~/pillarwallet
     macos:
-      xcode: "10.2.0"
+      xcode: "10.1.0"
     environment:
       FL_OUTPUT_DIR: output
     shell: /bin/bash --login -o pipefail
@@ -546,6 +542,11 @@ jobs:
       - run:
           name: Install AWS CLI
           command: sudo pip install awscli
+      - run:
+          name: Install RN dependencies
+          command: |
+            brew update
+            brew install watchman
       - run:
           name: Append circleCI build number to version
           command: |
@@ -819,7 +820,7 @@ workflows:
           filters:
             branches:
               only:
-                  - chore/ios_swift_version_increase4.2
+                  - chore/ios_swift_version4.2_circleci
       - stage_android:
           requires:
             - build-and-test
