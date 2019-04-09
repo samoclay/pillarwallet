@@ -4,12 +4,11 @@ language: objective-c
 before_install:
   - sudo pip install awscli
   - cd $TRAVIS_BUILD_DIR
-  - export APP_BUILD_NUMBER=7785
+  - export APP_BUILD_NUMBER=7786
   - export NODE_OPTIONS=--max_old_space_size=2048;
   - npm version $(node -e "const currentVersion=require('./package.json').version; const firstTwoDots=currentVersion.substring(0, currentVersion.lastIndexOf('.')+1); console.log(firstTwoDots);")$APP_BUILD_NUMBER
   - export buildNumber=$(node -e "console.log(require('./package.json').version);")
-  - rm .env
-  - cp environments/.env.staging ./.env
+  - rm .env && cp environments/.env.staging ./.env
   - sed -i.bak "s/_build_number_/$buildNumber/g" .env
   - sed -i.bak "s/_open_sea_api_key_/$OPEN_SEA_API_KEY/g" .env
   - sed -i.bak "s/_infura_project_id_/$INFURA_PROJECT_ID/g" .env
@@ -19,9 +18,36 @@ before_install:
 
 jobs:
   include:
-    - stage: build-and-upload
-      script: ./build-upload.sh
+    - stage: Install node dependencies
+      script:
+      - brew install yarn
+      - yarn install
+    - stage: Install cocoapods 1.5.3
+      script:
+      - yes | gem uninstall cocoapods
+      - gem install cocoapods -v 1.5.3
+    - stage: Install pods
+      script:
+      - cd $TRAVIS_BUILD_DIR/ios && pod install --verbose
+    - stage: Install bundler
+      script:
+      - cd $TRAVIS_BUILD_DIR && gem install bundler
+    - stage: Bundle install fastlane
+      script:
+      - cd $TRAVIS_BUILD_DIR/ios && bundle check || bundle install --path vendor/bundle
+    - stage: Bundle update
+      script:
+      - cd $TRAVIS_BUILD_DIR/ios && bundle update
+    - stage: Upload to Testflight
+      script:
+      - cd $TRAVIS_BUILD_DIR/ios && bundle exec fastlane deploy_staging APP_BUILD_NUMBER:$APP_BUILD_NUMBER build_number:$buildNumber APP_NAME:"Pillar Staging"
 
 stages:
-  - name: build-and-upload
+  - name: Install node dependencies
+  - name: Install cocoapods 1.5.3
+  - name: Install pods
+  - name: Install bundler
+  - name: Bundle install fastlane
+  - name: Bundle update
+  - name: Upload to Testflight
     if: branch = build/travis-ci-prod

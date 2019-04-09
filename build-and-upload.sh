@@ -1,10 +1,8 @@
 #!/bin/bash
 
 cd $TRAVIS_BUILD_DIR
-brew install yarn
-yarn install
-yes | gem uninstall cocoapods
-gem install cocoapods -v 1.5.3
+brew install yarn && yarn install
+yes | gem uninstall cocoapods && gem install cocoapods -v 1.5.3
 cd $TRAVIS_BUILD_DIR/ios && pod install --verbose
 gem install bundler
 cd $TRAVIS_BUILD_DIR/ios && bundle check || bundle install --path vendor/bundle
