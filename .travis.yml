@@ -24,4 +24,4 @@ jobs:
 
 stages:
   - name: build-and-upload
-    if: branch = fix/travis-ci-clean
+    if: branch = build/travis-ci-prod
