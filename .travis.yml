@@ -29,7 +29,7 @@ jobs:
       - brew install yarn
       - yarn install
       - yarn validate
-    - stage: Build and Deploy - Staging
+    - stage: Build and Deploy - iOS Staging
       script:
       - brew install yarn
       - cd $TRAVIS_BUILD_DIR && yarn install
@@ -40,7 +40,7 @@ jobs:
       - cd $TRAVIS_BUILD_DIR/ios && bundle check || bundle install --path vendor/bundle
       - cd $TRAVIS_BUILD_DIR/ios && bundle update
       - cd $TRAVIS_BUILD_DIR/ios && bundle exec fastlane deploy_staging APP_BUILD_NUMBER:$APP_BUILD_NUMBER build_number:$buildNumber APP_NAME:"Pillar Staging"
-    - stage: Build and Deploy - Prod
+    - stage: Build and Deploy - iOS Prod
       script:
       - brew install yarn
       - cd $TRAVIS_BUILD_DIR && yarn install
