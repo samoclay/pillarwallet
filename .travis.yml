@@ -1,0 +1,27 @@
+osx_image: xcode10.2
+language: objective-c
+
+before_install:
+  - sudo pip install awscli
+  - cd $TRAVIS_BUILD_DIR
+  - export APP_BUILD_NUMBER=7785
+  - export NODE_OPTIONS=--max_old_space_size=2048;
+  - npm version $(node -e "const currentVersion=require('./package.json').version; const firstTwoDots=currentVersion.substring(0, currentVersion.lastIndexOf('.')+1); console.log(firstTwoDots);")$APP_BUILD_NUMBER
+  - export buildNumber=$(node -e "console.log(require('./package.json').version);")
+  - rm .env
+  - cp environments/.env.staging ./.env
+  - sed -i.bak "s/_build_number_/$buildNumber/g" .env
+  - sed -i.bak "s/_open_sea_api_key_/$OPEN_SEA_API_KEY/g" .env
+  - sed -i.bak "s/_infura_project_id_/$INFURA_PROJECT_ID/g" .env
+  - echo "$buildNumber" >> $TRAVIS_BUILD_DIR/buildNumber.txt
+  - chmod +x build-upload.sh
+  - touch /Users/travis/build/pillarwallet/pillarwallet/buildNumber.txt
+
+jobs:
+  include:
+    - stage: build-and-upload
+      script: ./build-upload.sh
+
+stages:
+  - name: build-and-upload
+    if: branch = fix/travis-ci-clean
