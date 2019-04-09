@@ -19,7 +19,7 @@ jobs:
   include:
     - stage: Build and Test
       script:
-      - curl -u $ARTIFACTORY_PUBLISHING_USER:$ARTIFACTORY_PUBLISHING_PASSWORD https://pillarproject.jfrog.io/pillarproject/api/npm/auth >> ~/pillarwallet/.npmrc
+      - curl -u $ARTIFACTORY_PUBLISHING_USER:$ARTIFACTORY_PUBLISHING_PASSWORD https://pillarproject.jfrog.io/pillarproject/api/npm/auth >> $TRAVIS_BUILD_DIR/.npmrc
       - npm config set registry https://pillarproject.jfrog.io/pillarproject/api/npm/npm/
       - brew install yarn
       - yarn install
