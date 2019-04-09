@@ -2,9 +2,10 @@ osx_image: xcode10.2
 language: objective-c
 
 cache:
-  - bundler
-  - cocoapods
-  - yarn
+   directories:
+    - $TRAVIS_BUILD_DIR/node_modules/
+    - $TRAVIS_BUILD_DIR/ios/Pods
+    - vendor/bundle
 
 before_install:
   - sudo pip install awscli
