@@ -13,7 +13,6 @@ before_install:
   - sed -i.bak "s/_open_sea_api_key_/$OPEN_SEA_API_KEY/g" .env
   - sed -i.bak "s/_infura_project_id_/$INFURA_PROJECT_ID/g" .env
   - echo "$buildNumber" >> $TRAVIS_BUILD_DIR/buildNumber.txt
-  - chmod +x build-upload.sh
   - touch /Users/travis/build/pillarwallet/pillarwallet/buildNumber.txt
 
 jobs:
@@ -21,7 +20,7 @@ jobs:
     - stage: Install node dependencies
       script:
       - brew install yarn
-      - yarn install
+      - $TRAVIS_BUILD_DIR && yarn install
     - stage: Install cocoapods 1.5.3
       script:
       - yes | gem uninstall cocoapods
