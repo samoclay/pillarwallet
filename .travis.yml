@@ -20,7 +20,7 @@ jobs:
     - stage: Install node dependencies
       script:
       - brew install yarn
-      - $TRAVIS_BUILD_DIR && yarn install
+      - cd $TRAVIS_BUILD_DIR && yarn install
     - stage: Install cocoapods 1.5.3
       script:
       - yes | gem uninstall cocoapods
